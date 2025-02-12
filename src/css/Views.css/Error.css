@@ -1,0 +1,32 @@
+.App-error {
+    text-align: center;
+}
+   
+.App-header-error {
+    background-color: #a13733;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+ 
+.App-error-button{
+    padding: 20px;
+    border-color: #cfbdbc;
+    border-radius: 1rem;
+    font-size: x-large;
+    background-color: black;
+    color: white;
+    transition: padding 0.3s ease, border-color 0.3s ease;
+}
+
+.App-error-button:hover {
+    padding-left: 50px;
+    padding-right: 50px;
+    border-color: #82ffda;
+    color: black;
+    background-color: #cfbdbc;
+  }

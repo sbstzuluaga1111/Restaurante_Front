@@ -1,0 +1,37 @@
+.App-header-nav {
+  background-color: #77a133;
+  min-height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-header-nav-izquierda {
+margin-left: 5%;
+display: flex;
+justify-content: center;
+}
+
+.App-header-nav-derecha {
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  justify-content:space-around;
+  margin-right: 5%;
+}
+
+.App-header-nav-derecha-links{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 1%;
+}
+
+.App-header-nav-derecha-button{
+  font-style: none;
+  border: none;
+  border-radius: 0.5rem;
+ 
+}
