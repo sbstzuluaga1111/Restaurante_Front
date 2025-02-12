@@ -4,13 +4,13 @@ import "../css/Nav.css";
 function Nav() {
   return (
     <div className="App-header-nav">
-    
-        <div className="App-header-nav-izquierda">
-            <Link to="/">
-            Nav
-            </Link>
-        </div>
-      
+
+      <div className="App-header-nav-izquierda">
+        <Link to="/">
+          Nav
+        </Link>
+      </div>
+
       <div className="App-header-nav-derecha">
         <Link className='App-header-nav-derecha-links' to="/a">
           <button className='App-header-nav-derecha-button'>Menu</button>

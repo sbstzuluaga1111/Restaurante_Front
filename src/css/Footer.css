@@ -1,9 +1,9 @@
 .App-header-footer {
-    background-color: #77a133;
-    min-height: 20vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
+  background-color: #77a133;
+  min-height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}

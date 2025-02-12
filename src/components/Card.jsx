@@ -1,6 +1,6 @@
 import "../css/Card.css"
 
-import imagen1 from "../resource/Imgs/descarga.jpg"
+import imagen1 from "../resource/Imgs/Imagen1.jpg"
 
 function Card() {
   return (
@@ -12,7 +12,7 @@ function Card() {
       <div>
         Card
       </div>
-      
+
     </div>
   );
 }

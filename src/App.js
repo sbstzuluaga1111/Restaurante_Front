@@ -10,22 +10,22 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-          <Routes>
-            {/* Vista principal. Bienvenida */}
-            <Route path="/" element={<Home />} />
-            
-            {/* Otras rutas se pueden agregar aquí */}
-            <Route path="/a" element={<Menu />} />
-            <Route path="/b" element={<B />} />
-            <Route path="/c" element={<C />} />
+        <Routes>
+          {/* Vista principal. Bienvenida */}
+          <Route path="/" element={<Home />} />
 
-            {/* Ruta de error explícita */}
-            <Route path="/error" element={<Error />} />
-            
-            {/* Ruta catch-all para redirigir a error si la ruta no existe */}
-            <Route path="*" element={<Navigate to="/error" replace />} />
+          {/* Otras rutas se pueden agregar aquí */}
+          <Route path="/a" element={<Menu />} />
+          <Route path="/b" element={<B />} />
+          <Route path="/c" element={<C />} />
 
-          </Routes>
+          {/* Ruta de error explícita */}
+          <Route path="/error" element={<Error />} />
+
+          {/* Ruta catch-all para redirigir a error si la ruta no existe */}
+          <Route path="*" element={<Navigate to="/error" replace />} />
+
+        </Routes>
       </div>
     </BrowserRouter>
   );

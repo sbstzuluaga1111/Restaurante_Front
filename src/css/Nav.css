@@ -9,29 +9,29 @@
 }
 
 .App-header-nav-izquierda {
-margin-left: 5%;
-display: flex;
-justify-content: center;
+  margin-left: 5%;
+  display: flex;
+  justify-content: center;
 }
 
 .App-header-nav-derecha {
   height: 70px;
   display: flex;
   flex-direction: row;
-  justify-content:space-around;
+  justify-content: space-around;
   margin-right: 5%;
 }
 
-.App-header-nav-derecha-links{
+.App-header-nav-derecha-links {
   display: flex;
   flex-direction: row;
   justify-content: center;
   padding: 1%;
 }
 
-.App-header-nav-derecha-button{
+.App-header-nav-derecha-button {
   font-style: none;
   border: none;
   border-radius: 0.5rem;
- 
+
 }

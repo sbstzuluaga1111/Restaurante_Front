@@ -1,7 +1,7 @@
 .App-error {
     text-align: center;
 }
-   
+
 .App-header-error {
     background-color: #a13733;
     min-height: 100vh;
@@ -12,8 +12,8 @@
     font-size: calc(10px + 2vmin);
     color: white;
 }
- 
-.App-error-button{
+
+.App-error-button {
     padding: 20px;
     border-color: #cfbdbc;
     border-radius: 1rem;
@@ -29,4 +29,10 @@
     border-color: #82ffda;
     color: black;
     background-color: #cfbdbc;
-  }
+}
+
+.App-header-error-imagen {
+    width: 25%;
+    margin: 2%;
+    border-radius: 20rem;
+}

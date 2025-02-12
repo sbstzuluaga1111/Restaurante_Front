@@ -1,7 +1,7 @@
 .App-menu {
     text-align: center;
 }
-  
+
 .App-header-menu {
     background-color: #282c34;
     min-height: 90vh;
@@ -11,8 +11,8 @@
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
-  }
-  
+}
+
 .App-header-menu-list {
     padding: 5%;
     background-color: aquamarine;
@@ -28,9 +28,9 @@
     }
 }
 
-.App-header-menu-categoria{
-background-color: #696f7c;
-width: 90%;
-padding-left: 5%;
-text-align: start;
+.App-header-menu-categoria {
+    background-color: #696f7c;
+    width: 90%;
+    padding-left: 5%;
+    text-align: start;
 }
