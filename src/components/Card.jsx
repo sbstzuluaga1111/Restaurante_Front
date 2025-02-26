@@ -1,18 +1,19 @@
-import "../css/Card.css"
+import "../css/Card.css";
+import imagen1 from "../resource/Imgs/Imagen1.jpg";  // Imagen por defecto
 
-import imagen1 from "../resource/Imgs/Imagen1.jpg"
+function Card({ nombre, precio, imagen }) {
+  // Si no hay imagen, usamos la imagen por defecto
+  const imagenSrc = imagen ? imagen : imagen1;
 
-function Card() {
   return (
     <div className="App-header-card">
-
       <div>
-        <img className="App-header-card-imagen" src={imagen1} alt={imagen1} />
+        <img className="App-header-card-imagen" src={imagenSrc} alt={nombre} />
       </div>
       <div>
-        Card
+        <h3>{nombre}</h3>
+        <p>Precio: ${precio}</p>
       </div>
-
     </div>
   );
 }
