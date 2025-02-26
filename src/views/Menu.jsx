@@ -1,5 +1,4 @@
 import Card from "../components/Card";
-import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 
 import "../css/Views.css/Menu.css"
@@ -38,7 +37,6 @@ function Menu() {
 
                         </header>
 
-                        <Footer />
                 </div>
         );
 }
