@@ -1,15 +1,7 @@
-import Nav from "../components/Nav";
-import "../css/c.css"; 
-
-function C({ carrito }) { 
-  return (
-    <div className="App-c">
-      <Nav />
-      <header className="App-header-c">
-        <h1>Carrito</h1>
-      </header>
-
-      <div className="carrito-container">
+const C = ({ carrito }) => {
+    return (
+      <div>
+        <h2>Carrito de Compras</h2>
         {carrito.length === 0 ? (
           <p>El carrito está vacío</p>
         ) : (
@@ -22,6 +14,7 @@ function C({ carrito }) {
           </ul>
         )}
       </div>
-    </div>
-  );
-}
+    );
+  };
+  
+  export default C;
