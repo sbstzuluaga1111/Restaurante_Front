@@ -1,27 +1,16 @@
 import Nav from "../components/Nav";
-import "../css/c.css"; 
 
-function C({ carrito }) { 
+import "../css/Views.css/c.css"
+
+function c() {
   return (
-    <div className="App-c">
+    <div className='App-c'>
       <Nav />
-      <header className="App-header-c">
+      <header className='App-header-c'>
         <h1>Carrito</h1>
       </header>
-
-      <div className="carrito-container">
-        {carrito.length === 0 ? (
-          <p>El carrito está vacío</p>
-        ) : (
-          <ul>
-            {carrito.map((item, index) => (
-              <li key={index}>
-                {item.nombre} - ${item.precio}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
     </div>
   );
 }
+
+export default c;
