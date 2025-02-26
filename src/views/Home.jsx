@@ -1,4 +1,3 @@
-import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 import "../css/Views.css/Home.css"
 
@@ -18,7 +17,6 @@ function Home() {
       <header className='App-header-home-3'>
         <h1>Home 3</h1>
       </header>
-      <Footer />
     </div>
   );
 }

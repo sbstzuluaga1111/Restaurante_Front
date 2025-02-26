@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/Card";
-import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 
 import "../css/Views.css/Menu.css";

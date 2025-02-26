@@ -1,9 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Home from "./views/Home";
 import Error from './views/Error';
 import Menu from './views/Menu';
 import B from './views/b';
 import C from './views/c';
+import Footer from './components/Footer';
 
 
 function App() {
@@ -26,9 +27,17 @@ function App() {
           <Route path="*" element={<Navigate to="/error" replace />} />
 
         </Routes>
+        <FooterVisibility />
       </div>
     </BrowserRouter>
   );
+}
+
+function FooterVisibility() {
+  const location = useLocation();
+  const hideFooterOn = ["/b"]; // Agrega más rutas si es necesario
+
+  return !hideFooterOn.includes(location.pathname) ? <Footer /> : null;
 }
 
 export default App;
