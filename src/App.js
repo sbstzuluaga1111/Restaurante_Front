@@ -5,7 +5,9 @@ import Menu from './views/Menu';
 import B from './views/b';
 import C from './views/c';
 
-
+/*
+hola esto es un comentario
+*/
 function App() {
   return (
     <BrowserRouter>
