@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/Card";
 import Nav from "../components/Nav";
-
 import "../css/Views.css/Menu.css";
 
 function Menu() {
@@ -43,7 +42,6 @@ function Menu() {
                 </div>
             </header>
 
-            <Footer />
         </div>
     );
 }
