@@ -1,41 +1,57 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider } from "./context/AuthContext";
+
 import Home from "./views/Home";
 import Error from './views/Error';
 import Menu from './views/Menu';
 import B from './views/b';
 import C from './views/c';
+import Admin from "./views/Admin";
+import Empleado from "./views/Empleado";
 import Footer from './components/Footer';
-
+import ProtectedRoute from "./routes/ProtectedRoute.js"; // Importamos las rutas protegidas
 
 function App() {
   return (
-    <BrowserRouter>
-      <div>
-        <Routes>
-          {/* Vista principal. Bienvenida */}
-          <Route path="/" element={<Home />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <div>
+          <Routes>
+            {/* Vista principal */}
+            <Route path="/" element={<Home />} />
 
-          {/* Otras rutas se pueden agregar aquí */}
-          <Route path="/a" element={<Menu />} />
-          <Route path="/b" element={<B />} />
-          <Route path="/c" element={<C />} />
+            {/* Otras rutas */}
+            <Route path="/a" element={<Menu />} />
+            <Route path="/b" element={<B />} />
+            <Route path="/c" element={<C />} />
 
-          {/* Ruta de error explícita */}
-          <Route path="/error" element={<Error />} />
+            {/* Ruta protegida para ADMIN */}
+            <Route element={<ProtectedRoute requiredRole={1} />}>
+              <Route path="/admin" element={<Admin />} />
+            </Route>
 
-          {/* Ruta catch-all para redirigir a error si la ruta no existe */}
-          <Route path="*" element={<Navigate to="/error" replace />} />
+            {/* Ruta protegida para EMPLEADO */}
+            <Route element={<ProtectedRoute requiredRole={2} />}>
+              <Route path="/empleado" element={<Empleado />} />
+            </Route>
 
-        </Routes>
-        <FooterVisibility />
-      </div>
-    </BrowserRouter>
+            {/* Ruta de error */}
+            <Route path="/error" element={<Error />} />
+
+            {/* Catch-all */}
+            <Route path="*" element={<Navigate to="/error" replace />} />
+          </Routes>
+
+          <FooterVisibility />
+        </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
 function FooterVisibility() {
   const location = useLocation();
-  const hideFooterOn = ["/b"]; // Agrega más rutas si es necesario
+  const hideFooterOn = ["/b"];
 
   return !hideFooterOn.includes(location.pathname) ? <Footer /> : null;
 }
