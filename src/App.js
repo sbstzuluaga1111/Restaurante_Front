@@ -4,12 +4,13 @@ import { AuthProvider } from "./context/AuthContext";
 import Home from "./views/Home";
 import Error from './views/Error';
 import Menu from './views/Menu';
-import B from './views/b';
-import C from './views/c';
+import Login from './views/Login.jsx';
+import Carrito from './views/Carrito.jsx';
 import Admin from "./views/Admin";
 import Empleado from "./views/Empleado";
 import Footer from './components/Footer';
 import ProtectedRoute from "./routes/ProtectedRoute.js"; // Importamos las rutas protegidas
+import TareasAdmin from './views/TareasAdmin.jsx';
 
 function App() {
   return (
@@ -21,13 +22,20 @@ function App() {
             <Route path="/" element={<Home />} />
 
             {/* Otras rutas */}
-            <Route path="/a" element={<Menu />} />
-            <Route path="/b" element={<B />} />
-            <Route path="/c" element={<C />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/carrito" element={<Carrito />} />
+
+
+            
 
             {/* Ruta protegida para ADMIN */}
             <Route element={<ProtectedRoute requiredRole={1} />}>
               <Route path="/admin" element={<Admin />} />
+            </Route>
+            
+            <Route element={<ProtectedRoute requiredRole={1} />}>
+            <Route path='/gestion-tareas' element={<TareasAdmin />} />
             </Route>
 
             {/* Ruta protegida para EMPLEADO */}

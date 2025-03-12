@@ -54,20 +54,25 @@ function Nav() {
       </div>
 
       <div className="App-header-nav-derecha">
-        <Link className='App-header-nav-derecha-links' to="/a">
+        <Link className='App-header-nav-derecha-links' to="/menu">
           <button className='App-header-nav-derecha-button'>Menu</button>
         </Link>
-        <Link className='App-header-nav-derecha-links' to="/b">
+        <Link className='App-header-nav-derecha-links' to="/login">
           <button className='App-header-nav-derecha-button'>Administracion</button>
         </Link>
-        <Link className='App-header-nav-derecha-links' to="/c">
+        <Link className='App-header-nav-derecha-links' to="/carrito">
           <button className='App-header-nav-derecha-button'>Carrito</button>
         </Link>
 
         {isAuthenticated && (
+          <div className="App-header-nav-derecha">
+          <Link className='App-header-nav-derecha-links' to="/gestion-tareas">
+          <button className='App-header-nav-derecha-button'>Tareas</button>
+          </Link> 
           <button className="logout-button" onClick={handleLogout}>
             Cerrar Sesión
           </button>
+          </div>
         )}
       </div>
     </div>

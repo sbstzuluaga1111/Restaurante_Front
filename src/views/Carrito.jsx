@@ -2,7 +2,7 @@ import Nav from "../components/Nav";
 
 import "../css/Views.css/c.css"
 
-function c() {
+function Carrito() {
   return (
     <div className='App-c'>
       <Nav />
@@ -13,4 +13,4 @@ function c() {
   );
 }
 
-export default c;
+export default Carrito;
