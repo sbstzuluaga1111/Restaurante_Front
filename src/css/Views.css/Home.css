@@ -13,20 +13,62 @@
   color: white;
 }
 
-
 .App-header-home-1 {
   background-color: #2a56ad;
   min-height: 90vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+/* Cuando el tamaño sea menor a 768px (móviles y tablets pequeñas) */
+@media (max-width: 768px) {
+  .App-header-home-1 {
+    flex-direction: column;
+    /* Apila los elementos en columna */
+    justify-content: center;
+    /* Centra los elementos */
+    gap: 20px;
+    /* Espaciado entre elementos */
+    text-align: center;
+    /* Alineación del texto si es necesario */
+  }
+}
+
+.App-header-home-1-img {
+  max-width: 100%;
+  height: auto; /* Permite que la imagen mantenga su proporción */
+  min-height: 100%; /* Se ajusta al contenedor */
+  object-fit: cover; /* Ajusta la imagen sin deformarla */
+  display: block;
+  margin: 0 auto;
+}
+
+.App-header-home-1-container-1 {
+  background-color: rgb(189, 36, 36);
+  color: black;
+  padding: 2%;
+  width: 40%;
+  height: 400px; 
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.App-header-home-1-container-2 {
+  background-color: white;
+  color: black;
+  padding: 2%;
+  width: 50%;
+  border-radius: 1rem;
 }
 
 .App-header-home-2 {
-  background-color: #1d9b2d;
+  background-color: #7e1d9b;
   min-height: 90vh;
   display: flex;
   flex-direction: column;
@@ -36,13 +78,163 @@
   color: white;
 }
 
-.App-header-home-3 {
-  background-color: #da57da;
-  min-height: 90vh;
+.App-header-home-2-conjunto{
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+/* From Uiverse.io by gharsh11032000 */ 
+.App-header-home-2-card {
+  margin: 5%;
+  position: relative;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 320px;
+  border-radius: 24px;
+  line-height: 1.6;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.App-header-home-2-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 36px;
+  border-radius: 22px;
+  color: #ffffff;
+  overflow: hidden;
+  background: #0a3cff;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.App-header-home-2-content::before {
+  position: absolute;
+  content: "";
+  top: -4%;
+  left: 50%;
+  width: 90%;
+  height: 90%;
+  transform: translate(-50%);
+  background: #ced8ff;
+  z-index: -1;
+  transform-origin: bottom;
+
+  border-radius: inherit;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.App-header-home-2-content::after {
+  position: absolute;
+  content: "";
+  top: -8%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%);
+  background: #e7ecff;
+  z-index: -2;
+  transform-origin: bottom;
+  border-radius: inherit;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.App-header-home-2-content svg {
+  width: 48px;
+  height: 48px;
+}
+
+.App-header-home-2-content .App-header-home-2-para {
+  z-index: 1;
+  opacity: 1;
+  font-size: 18px;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.App-header-home-2-content .link {
+  z-index: 1;
+  color: #fea000;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 16px;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.App-header-home-2-content .link:hover {
+  text-decoration: underline;
+}
+
+.App-header-home-2-card:hover {
+  transform: translate(0px, -16px);
+}
+
+.App-header-home-2-card:hover .App-header-home-2-content::before {
+  rotate: -8deg;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.App-header-home-2-card:hover .App-header-home-2-content::after {
+  rotate: 8deg;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+.App-header-home-3 {
+  background-color: #2aad56;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+/* Cuando el tamaño sea menor a 768px (móviles y tablets pequeñas) */
+@media (max-width: 768px) {
+  .App-header-home-3 {
+    flex-direction: column;
+    /* Apila los elementos en columna */
+    justify-content: center;
+    /* Centra los elementos */
+    gap: 20px;
+    /* Espaciado entre elementos */
+    text-align: center;
+    /* Alineación del texto si es necesario */
+  }
+}
+
+.App-header-home-3-img {
+  max-width: 100%;
+  height: auto; /* Permite que la imagen mantenga su proporción */
+  min-height: 100%; /* Se ajusta al contenedor */
+  object-fit: cover; /* Ajusta la imagen sin deformarla */
+  display: block;
+  margin: 0 auto;
+}
+
+.App-header-home-3-container-1 {
+  background-color: rgb(189, 36, 36);
+  color: black;
+  padding: 2%;
+  width: 40%;
+  height: 400px; 
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.App-header-home-3-container-2 {
+  background-color: white;
+  color: black;
+  padding: 2%;
+  width: 50%;
+  border-radius: 1rem;
 }
