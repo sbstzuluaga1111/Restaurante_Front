@@ -1,0 +1,83 @@
+.App-tareasAdmin {
+    text-align: center;
+}
+
+.App-header-tareasAdmin{
+    background-color: #282c34;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-form-tareasAdmin {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    justify-content: center;
+}
+
+.App-input-tareasAdmin {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.App-btn-agregar-tareasAdmin {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.App-btn-agregar-tareasAdmin:hover {
+    background-color: #0056b3;
+}
+
+.App-list-tareasAdmin {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    width: 80%;
+    margin-top: 20px;
+}
+
+.App-item-tareasAdmin {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+.App-texto-tareasAdmin {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.App-asignado-tareasAdmin {
+    font-size: 14px;
+    color: #555;
+}
+
+.App-btn-eliminar-tareasAdmin {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.App-btn-eliminar-tareasAdmin:hover {
+    background-color: #b02a37;
+}
+

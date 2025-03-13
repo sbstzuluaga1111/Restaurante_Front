@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import apiRoutes from "../config/apiRoutes";  // Importamos las rutas centralizadas
 import Card from "../components/Card";
 import Nav from "../components/Nav";
 import "../css/Views.css/Menu.css";
@@ -8,9 +9,9 @@ function Menu() {
     const [productos, setProductos] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:3010/menu")
+        axios.get(apiRoutes.menu)  // Usamos la ruta desde apiRoutes
             .then((response) => {
-                setProductos(response.data);  // Asumiendo que los productos están en 'data'
+                setProductos(response.data);
             })
             .catch((error) => {
                 console.error("Hubo un error al obtener los productos:", error);
@@ -41,7 +42,6 @@ function Menu() {
                     )}
                 </div>
             </header>
-
         </div>
     );
 }
