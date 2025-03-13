@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from "../components/Nav";
-import  { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import apiRoutes from "../config/apiRoutes";
 import "../css/Views.css/b.css";
 
 function Login() {
@@ -15,7 +16,7 @@ function Login() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3010/login", {
+      const response = await fetch(apiRoutes.login, { // ⬅️ Aquí se usa apiRoutes.login
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,7 +33,6 @@ function Login() {
 
       // Decodificar token para obtener el rol
       const payload = jwtDecode(data.token);
-
       const role = payload.role;
 
       // Redirigir según el rol
