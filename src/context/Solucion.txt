@@ -1,0 +1,232 @@
+Archivos Modificados:
+
+////////////////////////////////////////////////////////////////////
+
+AuthContext.js:
+
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const AuthContext = createContext();
+const INACTIVITY_TIME = 1 * 60 * 1000; // ⏳ 1 minuto de inactividad
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [timeLeft, setTimeLeft] = useState(INACTIVITY_TIME / 1000); // ⏳ Tiempo restante en segundos
+    const inactivityTimer = useRef(null);
+    const countdownInterval = useRef(null);
+    const userRef = useRef(user); // Usamos useRef para evitar ciclos infinitos
+    const navigate = useNavigate(); // Inicializamos useNavigate
+
+    // Primero definimos la función logout
+    const logout = useCallback(() => {
+        console.log("🚪 Cierre de sesión iniciado");
+    
+        // ❌ Eliminar token y usuario
+        localStorage.removeItem("token");
+        setUser(null);  // Actualización del estado cuando se hace logout
+    
+        // 🛑 Detener temporizadores
+        if (inactivityTimer.current) {
+            clearTimeout(inactivityTimer.current);
+            inactivityTimer.current = null;
+        }
+        if (countdownInterval.current) {
+            clearInterval(countdownInterval.current);
+            countdownInterval.current = null;
+        }
+    
+        // 🔄 Notificar a todas las pestañas
+        localStorage.setItem("forceLogout", Date.now());
+        window.dispatchEvent(new Event("storage"));
+
+        // Redirigir a la página de inicio
+        navigate("/"); // Redirigir al home al cerrar sesión
+    }, [navigate]);
+
+    // Luego, definimos la función resetInactivityTimer
+    const resetInactivityTimer = useCallback(() => {
+        if (!userRef.current) return;
+        console.log("🔄 Reiniciando temporizador de inactividad...");
+        setTimeLeft(INACTIVITY_TIME / 1000);
+        
+        if (inactivityTimer.current) {
+            clearTimeout(inactivityTimer.current);
+        }
+        inactivityTimer.current = setTimeout(() => {
+            console.log("⏳ Tiempo de inactividad alcanzado, cerrando sesión...");
+            logout();
+        }, INACTIVITY_TIME);
+    }, [logout]);
+
+    // Después, manejamos la autenticación en useEffect
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                setUser(decodedToken); // Establecer usuario de manera segura
+                userRef.current = decodedToken; // Guardar el usuario en useRef
+                resetInactivityTimer(); // Iniciar el temporizador cuando el usuario inicie sesión
+            } catch (error) {
+                localStorage.removeItem("token");
+                setUser(null);
+            }
+        }
+    }, [resetInactivityTimer]); // Agregar 'resetInactivityTimer' como dependencia
+
+    useEffect(() => {
+        if (!userRef.current) {
+            if (countdownInterval.current) {
+                clearInterval(countdownInterval.current);
+                countdownInterval.current = null;
+            }
+            return;
+        }
+        
+        if (countdownInterval.current) {
+            clearInterval(countdownInterval.current);
+        }
+        countdownInterval.current = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 1) {
+                    console.log("⏳ Tiempo agotado, cerrando sesión...");
+                    clearInterval(countdownInterval.current);
+                    countdownInterval.current = null;
+                    logout();
+                    return 0;
+                }
+                console.log(`⏳ Tiempo restante para cierre de sesión: ${prev - 1} segundos`);
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => {
+            if (countdownInterval.current) {
+                clearInterval(countdownInterval.current);
+                countdownInterval.current = null;
+            }
+        };
+    }, [logout]);
+
+    useEffect(() => {
+        const handleActivity = () => {
+            if (userRef.current) {
+                resetInactivityTimer();
+            }
+        };
+
+        window.addEventListener("mousemove", handleActivity);
+        window.addEventListener("keydown", handleActivity);
+        window.addEventListener("click", handleActivity);
+
+        return () => {
+            window.removeEventListener("mousemove", handleActivity);
+            window.removeEventListener("keydown", handleActivity);
+            window.removeEventListener("click", handleActivity);
+        };
+    }, [resetInactivityTimer]);
+
+    useEffect(() => {
+        const handleStorageChange = (event) => {
+            if (event.key === "forceLogout") {
+                logout();
+            }
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
+    }, [logout]);
+
+    const login = useCallback((token) => {
+        localStorage.setItem("token", token);
+        
+        try {
+            const decodedToken = jwtDecode(token);
+            setUser(decodedToken); // Establecer el usuario de manera segura
+            userRef.current = decodedToken; // Guardar el usuario en useRef
+            resetInactivityTimer(); // Iniciar el temporizador al iniciar sesión
+        } catch (error) {
+            localStorage.removeItem("token");
+        }
+    
+        window.dispatchEvent(new Event("storage"));
+    }, [resetInactivityTimer]);
+
+    return (
+        <AuthContext.Provider value={{ user, login, logout, timeLeft }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => useContext(AuthContext);
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+App.js:
+
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider } from "./context/AuthContext"; // Importar el AuthProvider
+
+import Home from "./views/Home";
+import Error from './views/Error';
+import Menu from './views/Menu';
+import Login from './views/Login.jsx';
+import Carrito from './views/Carrito.jsx';
+import Admin from "./views/Admin";
+import Empleado from "./views/Empleado";
+import Footer from './components/Footer';
+import ProtectedRoute from "./routes/ProtectedRoute.js"; // Importamos las rutas protegidas
+import TareasAdmin from './views/TareasAdmin.jsx';
+
+function App() {
+  return (
+    <BrowserRouter> {/* Mover BrowserRouter afuera */}
+      <AuthProvider> {/* El AuthProvider está ahora dentro del BrowserRouter */}
+        <Routes>
+          {/* Vista principal */}
+          <Route path="/" element={<Home />} />
+
+          {/* Otras rutas */}
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/carrito" element={<Carrito />} />
+
+          {/* Ruta protegida para ADMIN */}
+          <Route element={<ProtectedRoute requiredRole={1} />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
+          
+          <Route element={<ProtectedRoute requiredRole={1} />}>
+            <Route path='/gestion-tareas' element={<TareasAdmin />} />
+          </Route>
+
+          {/* Ruta protegida para EMPLEADO */}
+          <Route element={<ProtectedRoute requiredRole={2} />}>
+            <Route path="/empleado" element={<Empleado />} />
+          </Route>
+
+          {/* Ruta de error */}
+          <Route path="/error" element={<Error />} />
+
+          {/* Catch-all */}
+          <Route path="*" element={<Navigate to="/error" replace />} />
+        </Routes>
+
+        <FooterVisibility />
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
+
+function FooterVisibility() {
+  const location = useLocation();
+  const hideFooterOn = ["/b"];
+
+  return !hideFooterOn.includes(location.pathname) ? <Footer /> : null;
+}
+
+export default App;
