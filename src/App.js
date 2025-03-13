@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from "react"; // 🔹 Agrego estos imports
 import { AuthProvider } from "./context/AuthContext";
 
 import Home from "./views/Home";
@@ -12,10 +13,27 @@ import Footer from './components/Footer';
 import ProtectedRoute from "./routes/ProtectedRoute.js"; // Importamos las rutas protegidas
 
 function App() {
+  const [forceRender, setForceRender] = useState(0); // 🔹 Estado para forzar el renderizado
+
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === "forceLogout") {
+        console.log("🔄 Detectado cambio en 'forceLogout', recargando...");
+        setForceRender((prev) => prev + 1); // 🔹 Cambia el estado para forzar la actualización
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div>
+        <div key={forceRender}> {/* 🔹 Agregamos la clave para forzar renderizado */}
           <Routes>
             {/* Vista principal */}
             <Route path="/" element={<Home />} />
