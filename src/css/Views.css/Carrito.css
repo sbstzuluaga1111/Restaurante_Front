@@ -1,0 +1,61 @@
+.App-Carrito {
+    text-align: center;
+}
+
+.App-header-Carrito {
+    background-color: #282c34;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.carrito-container-Carrito {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    margin: auto;
+    text-align: left;
+    color: black;
+}
+
+.carrito-container-Carrito ul {
+    list-style-type: none;
+    padding: 0;
+    color: black;
+}
+
+.carrito-container-Carrito li {
+    background: white;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.h3-Carrito {
+    margin-top: 20px;
+    
+}
+
+.btn-confirmar-Carrito {
+    background-color: #28a745;
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.btn-confirmar-Carrito:hover {
+    background-color: #218838;
+}
