@@ -1,38 +1,49 @@
-import { Navigate, Outlet } from "react-router-dom";
-
-// Función para obtener el rol del usuario desde el token
-const getUserRole = () => {
-  const token = localStorage.getItem("token");
-  if (!token) return null; // Si no hay token, no hay rol
-
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1])); // Decodifica el payload del token
-    return payload.role; // Retorna el rol del usuario (número)
-  } catch (error) {
-    return null; // Si hay error al decodificar, no hay rol válido
-  }
-};
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
 
 const ProtectedRoute = ({ requiredRole }) => {
-  const token = localStorage.getItem("token");
-  const userRole = getUserRole();
+  const { user, logout } = useAuth(); // 🔥 Importamos logout para purgar sesión
+  const location = useLocation();
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
-  // Si no hay token, redirige al home
-  if (!token) {
-    return <Navigate to="/" replace />;
+  useEffect(() => {
+    if (user !== undefined) {
+      console.log("🔎 ProtectedRoute: User:", user);
+      setCheckingAuth(false);
+    }
+  }, [user]);
+
+  if (checkingAuth) {
+    return null; // Esperamos hasta que la autenticación esté cargada completamente
   }
 
-  // Si el usuario es ADMIN (1), puede acceder a cualquier ruta protegida
-  if (userRole === 1) {
+  if (!user) {
+    console.warn("⛔ No hay usuario autenticado, redirigiendo a login...");
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // 🟢 Si el usuario es ADMIN (role = 1), puede acceder a cualquier ruta
+  if (user.role === 1) {
     return <Outlet />;
   }
 
-  // Si el usuario no tiene el rol requerido, redirige al home
-  if (requiredRole && userRole !== requiredRole) {
+  // 🚨 Si un EMPLEADO intenta entrar a /admin, se le purga la sesión
+  if (user.role === 2 && requiredRole === 1) {
+    console.warn("🔥 Empleado intentando ser ADMIN. Purgando sesión...");
+    logout(); // 🔥 Elimina el token y cierra sesión
+    return <Navigate to="/" state={{ message: "Por chistosito, sesión cerrada." }} replace />;
+  }
+
+  // 🚫 Si el usuario no tiene el rol correcto, se lo regresa a inicio
+  if (requiredRole !== undefined && user.role !== requiredRole) {
+    console.warn(
+      `⛔ Acceso denegado. Rol actual: ${user.role}, Se necesita rol ${requiredRole}`
+    );
     return <Navigate to="/" replace />;
   }
 
-  return <Outlet />; // Renderiza la ruta protegida si todo está bien
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

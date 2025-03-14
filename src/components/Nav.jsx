@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useAuth } from "../context/AuthContext"; // 💡 Importamos el contexto
 import Imagen from "../resource/Imgs/imagen3.png";
 import Carrito from "../resource/Imgs/carrito.png";
 import Perfil from "../resource/Imgs/perfil.png";
@@ -8,49 +9,19 @@ import Menu from "../resource/Imgs/menu.png";
 import "../css/Nav.css";
 
 function Nav() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { user, logout } = useAuth(); // 📌 Usamos el contexto de autenticación
   const navigate = useNavigate();
   const location = useLocation(); // Obtiene la ruta actual
 
+  const [isAuthenticated, setIsAuthenticated] = useState(!!user);
+
   useEffect(() => {
-    const verifyToken = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setIsAuthenticated(false);
-        return;
-      }
-
-      try {
-        const response = await fetch("http://localhost:3010/api/verify-token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.valid) {
-          setIsAuthenticated(true);
-        } else {
-          localStorage.removeItem("token");
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error("Error al verificar el token:", error);
-        localStorage.removeItem("token");
-        setIsAuthenticated(false);
-      }
-    };
-
-    verifyToken();
-  }, []);
+    setIsAuthenticated(!!user); // 📌 Se actualizará si cambia el usuario
+  }, [user]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsAuthenticated(false);
-    navigate("/");
+    logout(); // 📌 Llamamos a logout() del contexto
+    navigate("/"); // 📌 Redirigir después del logout
   };
 
   return (
@@ -60,7 +31,6 @@ function Nav() {
       </Link>
 
       <div className="App-header-nav-derecha">
-
         <Link className='App-header-nav-derecha-links' to="/menu">
           <button className={`App-header-nav-derecha-button ${location.pathname === "/menu" ? "active" : ""}`}>
             <img className='App-header-nav-menuIcon' src={Menu} alt="Menu" />
@@ -84,11 +54,14 @@ function Nav() {
 
         {isAuthenticated && (
           <div className="App-header-nav-derecha">
+            <span className="user-greeting">Hola, {user?.nickname || user?.email}!</span>
+
             <Link className='App-header-nav-derecha-links' to="/gestion-tareas">
               <button className={`App-header-nav-derecha-button ${location.pathname === "/gestion-tareas" ? "active" : ""}`}>
                 Tareas
               </button>
             </Link>
+
             <button className="logout-button" onClick={handleLogout}>
               Cerrar Sesión
             </button>
