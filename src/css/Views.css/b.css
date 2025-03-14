@@ -3,6 +3,7 @@
 }
 
 .App-header-b {
+  padding-top: 5%;
   background-color: #282c34;
   min-height: 90vh;
   display: flex;

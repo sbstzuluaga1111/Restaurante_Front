@@ -59,7 +59,7 @@ function App() {
 
 function FooterVisibility() {
   const location = useLocation();
-  const hideFooterOn = ["/b"];
+  const hideFooterOn = ["/error"];
 
   return !hideFooterOn.includes(location.pathname) ? <Footer /> : null;
 }

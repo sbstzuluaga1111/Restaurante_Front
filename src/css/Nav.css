@@ -1,17 +1,25 @@
 .App-header-nav {
-  background-color: #77a133;
+  position: fixed;
+  width: 100%;
+  background-color: #336fa198;
   min-height: 10vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: calc(10px + 2vmin);
   color: white;
+  margin-bottom: 400px;
 }
 
 .App-header-nav-izquierda {
+  background-color: white;
   margin-left: 5%;
   display: flex;
-  justify-content: center;
+  width: 9%;
+  padding: 2px;
+  border: 1px solid black;
+  height: 70px;
+  border-radius: 0.5rem;
 }
 
 .App-header-nav-derecha {
@@ -22,19 +30,9 @@
   margin-right: 5%;
 }
 
-.App-header-nav-derecha-links {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding: 1%;
-}
 
-.App-header-nav-derecha-button {
-  font-style: none;
-  border: none;
-  border-radius: 0.5rem;
 
-}
+
 
 .logout-button {
   background-color: #d9534f;
@@ -47,6 +45,92 @@
   margin-left: 15px;
   transition: background 0.3s ease-in-out;
 }
+
+.App-header-nav-logo{
+  width: 100%;
+  padding: 5px;
+  border-radius: 0.5rem;
+}
+
+
+
+
+
+.App-header-nav-derecha-links {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 1%;
+  margin: 2%;
+  border-radius: 1rem;
+  text-decoration: none;
+}
+
+.App-header-nav-derecha-button {
+  font-style: none;
+  border: none;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  background: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  padding: 5px;
+  position: relative;
+  width: auto; /* Ajusta automáticamente al contenido */
+  min-width: 40px; /* Solo el tamaño del icono */
+}
+
+/* Icono del menú */
+.App-header-nav-menuIcon {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Ocultamos el texto inicialmente sin dejar espacio */
+.App-header-nav-derecha-button p {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transform: translateX(-10px);
+  transition: max-width 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+}
+
+/* Mostrar el texto al hacer hover */
+.App-header-nav-derecha-button:hover p {
+  max-width: 150px;
+  opacity: 1;
+  transform: translateX(0);
+  margin-left: 5px;
+}
+
+/* Mostrar el texto si la ruta es la actual */
+.App-header-nav-derecha-button.active {
+  padding: 5px 10px; /* Asegura que haya espacio para el texto */
+}
+
+.App-header-nav-derecha-button.active p {
+  max-width: 150px;
+  opacity: 1;
+  transform: translateX(0);
+  margin-left: 5px;
+}
+
+
+
+
+
+
+
 
 .logout-button:hover {
   background-color: #c9302c;
