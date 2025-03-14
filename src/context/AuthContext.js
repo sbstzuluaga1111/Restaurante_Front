@@ -1,178 +1,206 @@
-// La verdad no se que esta fallando DIRECTAMENTE con el renderizado de los datos ya que inicia sesion, carga el token pero no carga los logs del iniciamiento del contador
-// se intento de multiples formas de forzar un recargado de la pantalla para que se vea la parte de la inactividad, a la par que la inactividad
-// como tampoco re-renderiza la pagina al cerrar sesion, sigue estableciendo el contador cuando se le dio a F5 manualmente para que cargue el contador de
-// inactividad
-
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 const INACTIVITY_TIME = 1 * 60 * 1000; // ⏳ 1 minuto de inactividad
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [forceRender, setForceRender] = useState(0); // ⏳ Estado forzado
+    const [timeLeft, setTimeLeft] = useState(INACTIVITY_TIME / 1000);
     const inactivityTimer = useRef(null);
-    const logoutRef = useRef(null); // 🔹 Referencia a logout
+    const countdownInterval = useRef(null);
+    const userRef = useRef(user);
+    const navigate = useNavigate();
+    const isMounted = useRef(true); 
 
-    // 🔄 Reiniciar temporizador de inactividad (Ahora usa logoutRef en lugar de logout directamente)
+    useEffect(() => {
+        isMounted.current = true;
+        return () => {
+            isMounted.current = false; // 🔴 Se desmonta el componente
+        };
+    }, []);
+
+    // ✅ Función para cerrar sesión
+    const logout = useCallback(async () => {
+        console.log("🚪 Cierre de sesión iniciado");
+
+        const token = localStorage.getItem("token");
+        if (token) {
+            await fetch("http://localhost:3010/api/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token }),
+            });
+        }
+
+        localStorage.removeItem("token");
+        setUser(null);
+        userRef.current = null;
+
+        if (inactivityTimer.current) {
+            clearTimeout(inactivityTimer.current);
+            inactivityTimer.current = null;
+        }
+        if (countdownInterval.current) {
+            clearInterval(countdownInterval.current);
+            countdownInterval.current = null;
+        }
+
+        localStorage.setItem("forceLogout", Date.now());
+        window.dispatchEvent(new Event("storage"));
+
+        if (isMounted.current) {
+            navigate("/");
+        }
+    }, [navigate]);
+
+    // ✅ Función para validar sesión con el backend
+    const validateSession = useCallback(async () => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+    
+        try {
+            const response = await fetch("http://localhost:3010/api/verify-token", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+    
+            const data = await response.json();
+            if (!data.valid) {
+                console.log("🔴 Sesión inválida, cerrando...");
+                logout();
+            }
+        } catch (error) {
+            console.error("Error validando sesión:", error);
+        }
+    }, [logout]); // ✅ Agregamos logout como dependencia
+
+    // 🔄 Reinicio del temporizador de inactividad
     const resetInactivityTimer = useCallback(() => {
-        if (!user) return; // 🔥 Solo si el usuario está autenticado
-        console.log("🔄 Reseteando temporizador de inactividad...");
+        if (!userRef.current) return;
+        console.log("🔄 Reiniciando temporizador de inactividad...");
+        setTimeLeft(INACTIVITY_TIME / 1000);
+
         if (inactivityTimer.current) {
             clearTimeout(inactivityTimer.current);
         }
         inactivityTimer.current = setTimeout(() => {
             console.log("⏳ Tiempo de inactividad alcanzado, cerrando sesión...");
-            logoutRef.current?.(); // 🔹 Usamos la referencia en lugar de llamar directamente a logout
+            logout();
         }, INACTIVITY_TIME);
-    }, [user]);
-
-    // 🛑 Cerrar sesión
-    const logout = useCallback(() => {
-        console.log("🚪 Cierre de sesión iniciado");
-    
-        // ❌ Eliminar token y usuario
-        localStorage.removeItem("token");
-        console.log("🗑️ Token eliminado:", localStorage.getItem("token")); // 🔍 Verificar si realmente se eliminó
-    
-        // 🔄 Forzar recarga en todas las pestañas
-        localStorage.setItem("forceLogout", Date.now());
-    
-        // 🛑 Detener temporizador de inactividad
-        if (inactivityTimer.current) {
-            clearTimeout(inactivityTimer.current);
-            inactivityTimer.current = null;
-        }
-        setUser(null);
-    
-        // 🔻 Eliminar eventos de actividad
-        console.log("🔻 Eliminando eventos de actividad...");
-        window.removeEventListener("mousemove", resetInactivityTimer);
-        window.removeEventListener("keydown", resetInactivityTimer);
-        window.removeEventListener("click", resetInactivityTimer);
-    
-        // 🔄 Notificar a todas las pestañas
-        window.dispatchEvent(new Event("storage"));
-    
-        // 🚀 FORZAR RECARGA TOTAL
-        console.log("🔄 Recargando con window.location.href...");
-        setTimeout(() => {
-            window.location.href = "/";
-        }, 500);
-    }, [resetInactivityTimer]);
-    
-
-     
-    
-
-    // 🔹 Actualizar referencia a logout después de definirlo
-    useEffect(() => {
-        logoutRef.current = logout;
     }, [logout]);
 
-    // 🔄 Sincronizar cierre de sesión entre pestañas
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                setUser(decodedToken);
+                userRef.current = decodedToken;
+                resetInactivityTimer();
+                validateSession(); // 🔥 Validar token al cargar la app
+            } catch (error) {
+                localStorage.removeItem("token");
+                setUser(null);
+                userRef.current = null;
+            }
+        }
+    }, [resetInactivityTimer, validateSession]);
+
+    useEffect(() => {
+        if (!userRef.current) {
+            if (countdownInterval.current) {
+                clearInterval(countdownInterval.current);
+                countdownInterval.current = null;
+            }
+            return;
+        }
+
+        if (countdownInterval.current) {
+            clearInterval(countdownInterval.current);
+        }
+        countdownInterval.current = setInterval(() => {
+            setTimeLeft(prev => {
+                if (!userRef.current || prev <= 1) {
+                    console.log("⏳ Tiempo agotado o usuario no autenticado, cerrando sesión...");
+                    clearInterval(countdownInterval.current);
+                    countdownInterval.current = null;
+                    logout();
+                    return 0;
+                }
+                console.log(`⏳ Tiempo restante para cierre de sesión: ${prev - 1} segundos`);
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => {
+            if (countdownInterval.current) {
+                clearInterval(countdownInterval.current);
+                countdownInterval.current = null;
+            }
+        };
+    }, [logout]);
+
+    // ⏳ Detectar actividad del usuario
+    useEffect(() => {
+        const handleActivity = () => {
+            if (userRef.current) {
+                resetInactivityTimer();
+            }
+        };
+
+        window.addEventListener("mousemove", handleActivity);
+        window.addEventListener("keydown", handleActivity);
+        window.addEventListener("click", handleActivity);
+
+        return () => {
+            window.removeEventListener("mousemove", handleActivity);
+            window.removeEventListener("keydown", handleActivity);
+            window.removeEventListener("click", handleActivity);
+        };
+    }, [resetInactivityTimer]);
+
+    // 🔥 Detectar cambios en el localStorage (forceLogout desde otra pestaña)
     useEffect(() => {
         const handleStorageChange = (event) => {
             if (event.key === "forceLogout") {
-                console.log("🔄 Detectado cambio en 'forceLogout', recargando...");
-                window.location.reload();
+                logout();
             }
         };
 
         window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
+    }, [logout]);
 
-        return () => {
-            window.removeEventListener("storage", handleStorageChange);
-        };
-    }, []);
-
-
-    // 🛠️ Sincronizar autenticación
-    const syncAuth = useCallback(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            console.log("⚠️ No hay token, usuario no autenticado.");
-            setUser(null);
-            return;
-        }
-    
-        try {
-            const decodedToken = jwtDecode(token);
-            console.log("✅ Usuario autenticado:", decodedToken);
-            setUser(decodedToken);
-            setForceRender(prev => prev + 1); // 🔄 Forzar render
-        } catch (error) {
-            console.error("❌ Error al decodificar token:", error);
-            localStorage.removeItem("token");
-            setUser(null);
-        }
-    }, []);
-    
-
-    useEffect(() => {
-        syncAuth(); // Ejecutar al montar
-
-        // 📌 Escuchar cambios en `localStorage`
-        window.addEventListener("storage", syncAuth);
-
-        return () => {
-            console.log("🔻 Eliminando eventos...");
-            window.removeEventListener("storage", syncAuth);
-        };
-    }, [syncAuth]);
-
-    useEffect(() => {
-        if (!user) return; // 🔥 Solo manejar inactividad si hay usuario autenticado
-
-        console.log("🟢 Iniciando detección de inactividad...");
-        resetInactivityTimer();
-
-        window.addEventListener("mousemove", resetInactivityTimer);
-        window.addEventListener("keydown", resetInactivityTimer);
-        window.addEventListener("click", resetInactivityTimer);
-
-        return () => {
-            console.log("🔻 Eliminando eventos de actividad...");
-            window.removeEventListener("mousemove", resetInactivityTimer);
-            window.removeEventListener("keydown", resetInactivityTimer);
-            window.removeEventListener("click", resetInactivityTimer);
-            if (inactivityTimer.current) {
-                clearTimeout(inactivityTimer.current);
-            }
-        };
-    }, [user, resetInactivityTimer]); // Ahora solo se ejecuta cuando `user` cambia
-
-    // 🔑 Iniciar sesión
-    const login = (token) => {
-        console.log("📝 Guardando token:", token);
+    // ✅ Función para iniciar sesión y validar el token con el backend
+    const login = useCallback(async (token) => {
         localStorage.setItem("token", token);
-        
+
         try {
             const decodedToken = jwtDecode(token);
-            setUser(decodedToken); // 🔄 Asegurar que el estado de usuario se actualiza primero
-            setForceRender(prev => prev + 1); // 🔄 Forzar re-render
+            setUser(decodedToken);
+            userRef.current = decodedToken;
+            resetInactivityTimer();
+
+            // 🔥 Validar sesión con el backend
+            await validateSession();
         } catch (error) {
-            console.error("❌ Error al decodificar token:", error);
+            console.error("Error al decodificar el token:", error);
+            localStorage.removeItem("token");
         }
-    
-        window.dispatchEvent(new Event("storage")); // 🔄 Notificar otras pestañas
-    
-        // 🔄 Recargar la página después de 500ms para asegurarse de que todo se actualiza correctamente
-        setTimeout(() => {
-            window.location.reload();
-        }, 500);
-    };
-    
+
+        window.dispatchEvent(new Event("storage"));
+    }, [resetInactivityTimer, validateSession]);
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
-            <div key={forceRender}> {/* 🔹 Este key forzará el re-render cuando cambie el estado */}
-                {children}
-            </div>
+        <AuthContext.Provider value={{ user, login, logout, timeLeft }}>
+            {children}
         </AuthContext.Provider>
     );
-    
 };
 
 export const useAuth = () => useContext(AuthContext);
