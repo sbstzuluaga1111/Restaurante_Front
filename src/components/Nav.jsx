@@ -14,6 +14,8 @@ function Nav() {
   const location = useLocation(); // Obtiene la ruta actual
 
   const [isAuthenticated, setIsAuthenticated] = useState(!!user);
+  const isAdmin = user?.role === 1; // 👑 Es Admin
+  const isEmpleado = user?.role === 2; // 👷‍♂️ Es Empleado
 
   useEffect(() => {
     setIsAuthenticated(!!user); // 📌 Se actualizará si cambia el usuario
@@ -26,46 +28,66 @@ function Nav() {
 
   return (
     <div className="App-header-nav">
-      <Link className="App-header-nav-izquierda" to="/">
-        <img className='App-header-nav-logo' src={Imagen} alt="Logo" />
-      </Link>
+      {/* 🔹 Logo (Siempre visible) */}
+      {isEmpleado ? (
+        // ⛔ Si es empleado, mostramos la imagen SIN enlace
+        <div className="App-header-nav-izquierda">
+          <img className="App-header-nav-logo" src={Imagen} alt="Logo" />
+        </div>
+      ) : (
+        // ✅ Si NO es empleado, el logo redirige a "/"
+        <Link className="App-header-nav-izquierda" to="/">
+          <img className="App-header-nav-logo" src={Imagen} alt="Logo" />
+        </Link>
+      )}
+
+      {/* 🔹 Mostrar saludo solo si hay usuario autenticado */}
+      {isAuthenticated && <span className="user-greeting">Hola, {user?.nickname || user?.email}!</span>}
 
       <div className="App-header-nav-derecha">
-        <Link className='App-header-nav-derecha-links' to="/menu">
-          <button className={`App-header-nav-derecha-button ${location.pathname === "/menu" ? "active" : ""}`}>
-            <img className='App-header-nav-menuIcon' src={Menu} alt="Menu" />
-            <p>Menu</p>
-          </button>
-        </Link>
-
-        <Link className='App-header-nav-derecha-links' to="/login">
-          <button className={`App-header-nav-derecha-button ${location.pathname === "/login" ? "active" : ""}`}>
-            <img className='App-header-nav-menuIcon' src={Perfil} alt="Administracion" />
-            <p>Administracion</p>
-          </button>
-        </Link>
-
-        <Link className='App-header-nav-derecha-links' to="/carrito">
-          <button className={`App-header-nav-derecha-button ${location.pathname === "/carrito" ? "active" : ""}`}>
-            <img className='App-header-nav-menuIcon' src={Carrito} alt="Carrito" />
-            <p>Carrito</p>
-          </button>
-        </Link>
-
-        {isAuthenticated && (
-          <div className="App-header-nav-derecha">
-            <span className="user-greeting">Hola, {user?.nickname || user?.email}!</span>
-
-            <Link className='App-header-nav-derecha-links' to="/gestion-tareas">
-              <button className={`App-header-nav-derecha-button ${location.pathname === "/gestion-tareas" ? "active" : ""}`}>
-                Tareas
+        {/* 🔹 CLIENTE (No autenticado) o ADMIN (role 1) */}
+        {(!isAuthenticated || isAdmin) && (
+          <>
+            <Link className='App-header-nav-derecha-links' to="/menu">
+              <button className={`App-header-nav-derecha-button ${location.pathname === "/menu" ? "active" : ""}`}>
+                <img className='App-header-nav-menuIcon' src={Menu} alt="Menu" />
+                <p>Menu</p>
               </button>
             </Link>
 
-            <button className="logout-button" onClick={handleLogout}>
-              Cerrar Sesión
+            {/* 🔥 SOLO SE MUESTRA "Administración" SI NO HAY USUARIO AUTENTICADO */}
+            {!isAuthenticated && (
+              <Link className='App-header-nav-derecha-links' to="/login">
+                <button className={`App-header-nav-derecha-button ${location.pathname === "/login" ? "active" : ""}`}>
+                  <img className='App-header-nav-menuIcon' src={Perfil} alt="Administracion" />
+                  <p>Administracion</p>
+                </button>
+              </Link>
+            )}
+
+            <Link className='App-header-nav-derecha-links' to="/carrito">
+              <button className={`App-header-nav-derecha-button ${location.pathname === "/carrito" ? "active" : ""}`}>
+                <img className='App-header-nav-menuIcon' src={Carrito} alt="Carrito" />
+                <p>Carrito</p>
+              </button>
+            </Link>
+          </>
+        )}
+
+        {/* 🔹 EMPLEADO (role 2) o ADMIN (role 1) pueden ver "Tareas" */}
+        {(isEmpleado || isAdmin) && (
+          <Link className='App-header-nav-derecha-links' to="/gestion-tareas">
+            <button className={`App-header-nav-derecha-button ${location.pathname === "/gestion-tareas" ? "active" : ""}`}>
+              Tareas
             </button>
-          </div>
+          </Link>
+        )}
+
+        {/* 🔹 TODOS LOS AUTENTICADOS pueden cerrar sesión */}
+        {isAuthenticated && (
+          <button className="logout-button" onClick={handleLogout}>
+            Cerrar Sesión
+          </button>
         )}
       </div>
     </div>

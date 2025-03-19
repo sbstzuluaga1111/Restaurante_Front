@@ -4,10 +4,11 @@ import "../css/Views.css/empleado.css"; // Asegúrate de tener el CSS correcto
 
 function Empleado() {
   return (
-    <div className="empleado-container">
+    <div className='App-home'>
       <Nav />
-      <h1>Bienvenido Empleado</h1>
-    </div>
+      <header className='App-header-home'>
+      <h1>Bienvenido Empleado</h1></header>
+      </div>
   );
 }
 
