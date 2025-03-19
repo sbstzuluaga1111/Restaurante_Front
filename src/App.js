@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AuthProvider } from "./context/AuthContext"; // Importar el AuthProvider
-
+import { AuthProvider } from "./context/AuthContext"; 
+import AuthRedirect from "./routes/AuthRedirect";  // 👈 Importamos la redirección automática
 import Home from "./views/Home";
 import Error from './views/Error';
 import Menu from './views/Menu';
@@ -9,24 +9,22 @@ import Carrito from './views/Carrito.jsx';
 import Admin from "./views/Admin";
 import Empleado from "./views/Empleado";
 import Footer from './components/Footer';
-import ProtectedRoute from "./routes/ProtectedRoute.js"; // Importamos las rutas protegidas
+import ProtectedRoute from "./routes/ProtectedRoute.js";
 import ProtectedRouteMulti from "./routes/ProtectedRouteMulti.js";
 import TareasAdmin from './views/TareasAdmin.jsx';
 
 function App() {
   return (
-    <BrowserRouter> {/* Mover BrowserRouter afuera */}
-      <AuthProvider> {/* El AuthProvider está ahora dentro del BrowserRouter */}
-        <Routes>
-          {/* Vista principal */}
-          <Route path="/" element={<Home />} />
+    <BrowserRouter>
+      <AuthProvider>
+        <AuthRedirect />  {/* 👈 Ahora importamos el AuthRedirect como componente separado */}
 
-          {/* Otras rutas */}
+        <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/login" element={<Login />} />
           <Route path="/carrito" element={<Carrito />} />
 
-          {/* Ruta protegida para ADMIN */}
           <Route element={<ProtectedRoute requiredRole={1} />}>
             <Route path="/admin" element={<Admin />} />
           </Route>
@@ -35,15 +33,11 @@ function App() {
             <Route path='/gestion-tareas' element={<TareasAdmin />} />
           </Route>
 
-          {/* Ruta protegida para EMPLEADO */}
           <Route element={<ProtectedRoute requiredRole={2} />}>
             <Route path="/empleado" element={<Empleado />} />
           </Route>
 
-          {/* Ruta de error */}
           <Route path="/error" element={<Error />} />
-
-          {/* Catch-all */}
           <Route path="*" element={<Navigate to="/error" replace />} />
         </Routes>
 
@@ -53,10 +47,10 @@ function App() {
   );
 }
 
+// ✅ Función para ocultar el Footer en ciertas rutas
 function FooterVisibility() {
   const location = useLocation();
   const hideFooterOn = ["/error"];
-
   return !hideFooterOn.includes(location.pathname) ? <Footer /> : null;
 }
 

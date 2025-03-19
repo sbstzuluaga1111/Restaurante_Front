@@ -29,17 +29,12 @@ function Nav() {
   return (
     <div className="App-header-nav">
       {/* 🔹 Logo (Siempre visible) */}
-      {isEmpleado ? (
-        // ⛔ Si es empleado, mostramos la imagen SIN enlace
-        <div className="App-header-nav-izquierda">
-          <img className="App-header-nav-logo" src={Imagen} alt="Logo" />
-        </div>
-      ) : (
-        // ✅ Si NO es empleado, el logo redirige a "/"
-        <Link className="App-header-nav-izquierda" to="/">
-          <img className="App-header-nav-logo" src={Imagen} alt="Logo" />
-        </Link>
-      )}
+    <Link 
+      className="App-header-nav-izquierda" 
+      to={!isAuthenticated ? "/" : isAdmin ? "/admin" : "/empleado"}
+    >
+      <img className="App-header-nav-logo" src={Imagen} alt="Logo" />
+    </Link>
 
       {/* 🔹 Mostrar saludo solo si hay usuario autenticado */}
       {isAuthenticated && <span className="user-greeting">Hola, {user?.nickname || user?.email}!</span>}
