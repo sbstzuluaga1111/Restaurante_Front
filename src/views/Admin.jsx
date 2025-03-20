@@ -4,11 +4,14 @@ import "../css/Views.css/admin.css"; // Asegúrate de tener el CSS correcto
 
 function Admin() {
   return (
-    <div className="admin-container">
+      <div className='App-home'>
       <Nav />
-      <h1>Bienvenido Administrador</h1>
-    </div>
+      <header className='App-header-home'>
+      <h1>Bienvenido Administrador</h1></header>
+      </div>
+
   );
 }
+
 
 export default Admin;

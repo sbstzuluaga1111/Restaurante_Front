@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
-const INACTIVITY_TIME = 1 * 60 * 1000; // ⏳ 1 minuto de inactividad
+const INACTIVITY_TIME = 15 * 60 * 1000; // ⏳ 10 minuto de inactividad
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -132,7 +132,7 @@ export const AuthProvider = ({ children }) => {
                     logout();
                     return 0;
                 }
-                console.log(`⏳ Tiempo restante para cierre de sesión: ${prev - 1} segundos`);
+                //console.log(`⏳ Tiempo restante para cierre de sesión: ${prev - 1} segundos`);
                 return prev - 1;
             });
         }, 1000);
