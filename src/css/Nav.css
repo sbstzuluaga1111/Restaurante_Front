@@ -17,7 +17,6 @@
   display: flex;
   width: 9%;
   padding: 2px;
-  border: 1px solid black;
   height: 70px;
   border-radius: 0.5rem;
 }
@@ -46,12 +45,15 @@
   transition: background 0.3s ease-in-out;
 }
 
-.App-header-nav-logo{
+.App-header-nav-logo {
   width: 100%;
-  padding: 5px;
-  border-radius: 0.5rem;
+  transition: all 0.3s ease-in-out;
 }
 
+.App-header-nav-logo:hover {
+  width: 100%;
+  padding: 2%;
+}
 
 
 
