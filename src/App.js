@@ -10,7 +10,7 @@ import Admin from "./views/Admin";
 import Empleado from "./views/Empleado";
 import Footer from './components/Footer';
 import ProtectedRoute from "./routes/ProtectedRoute.js";
-import ProtectedRouteMulti from "./routes/ProtectedRouteMulti.js";
+//import ProtectedRouteMulti from "./routes/ProtectedRouteMulti.js";
 import TareasAdmin from './views/TareasAdmin.jsx';
 
 function App() {
@@ -29,7 +29,8 @@ function App() {
             <Route path="/admin" element={<Admin />} />
           </Route>
           
-          <Route element={<ProtectedRouteMulti allowedRoles={[1, 2]} />}>
+          {/*<Route element={<ProtectedRouteMulti allowedRoles={[1, 2]} />}>*/}
+          <Route element={<ProtectedRoute requiredRole={1} />}>
             <Route path='/gestion-tareas' element={<TareasAdmin />} />
           </Route>
 
