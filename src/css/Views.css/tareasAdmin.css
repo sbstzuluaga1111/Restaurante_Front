@@ -1,40 +1,122 @@
 .App-tareasAdmin {
     text-align: center;
-}
-
-.App-header-tareasAdmin{
+  }
+  
+  .App-header-tareasAdmin {
     padding-top: 5%;
     background-color: #282c34;
     min-height: 90vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     font-size: calc(10px + 2vmin);
     color: white;
-}
-
-/* Estilos para el formulario */
-.App-form-tareasAdmin {
+  }
+  
+  /* ====================
+     FORMULARIO
+  ==================== */
+  
+  .App-form-tareasAdmin-wrapper {
+    background-color: #172446;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+    max-width: 900px;
+    width: 100%;
+    margin: 30px auto;
+  }
+  
+  .App-form-tareasAdmin {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .form-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px 0;
-    justify-content: center;
-    max-width: 600px;
+    gap: 20px;
+    justify-content: space-between;
     width: 100%;
-}
-
-.App-input-tareasAdmin {
+  }
+  
+  .form-group {
+    width: 100%;
+  }
+  
+  .form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .App-tareasAdmin label,
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    color: #ccc;
+  }
+  
+  /* Inputs y selects */
+  .App-input-tareasAdmin {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
     width: 100%;
-    max-width: 250px;
-}
-
-.App-btn-agregar-tareasAdmin {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Selects de empleados */
+  .empleados-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .empleado-select-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Botón eliminar empleado */
+  .btn-eliminar-select {
+    background: none;
+    border: none;
+    color: #ff5c5c;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .btn-eliminar-select:hover {
+    color: #ff1a1a;
+  }
+  
+  /* Botón agregar empleado */
+  .btn-agregar-select {
+    margin-top: 10px;
+    background-color: #2d88ff;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .btn-agregar-select:hover {
+    background-color: #1b6cd6;
+  }
+  
+  /* Botón agregar tarea */
+  .App-btn-agregar-tareasAdmin {
     background-color: #007bff;
     color: white;
     padding: 10px 15px;
@@ -43,21 +125,21 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
-}
-
-.App-btn-agregar-tareasAdmin:hover {
+  }
+  .App-btn-agregar-tareasAdmin:hover {
     background-color: #0056b3;
-}
-
-/* Accesibilidad: Estilo para el focus */
-.App-btn-agregar-tareasAdmin:focus, 
-.App-btn-eliminar-tareasAdmin:focus {
+  }
+  
+  .App-btn-agregar-tareasAdmin:focus,
+  .App-btn-eliminar-tareasAdmin:focus {
     outline: 2px solid #fff;
     outline-offset: 2px;
-}
-
-/* Mejoras en la lista de tareas */
-.App-list-tareasAdmin {
+  }
+  
+  /* ====================
+     LISTA DE TAREAS
+  ==================== */
+  .App-list-tareasAdmin {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
@@ -65,9 +147,9 @@
     max-width: 1200px;
     margin-top: 20px;
     margin-bottom: 100px;
-}
-
-.App-item-tareasAdmin {
+  }
+  
+  .App-item-tareasAdmin {
     background: white;
     color: black;
     padding: 20px;
@@ -75,33 +157,32 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
     text-align: left;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.App-item-tareasAdmin:hover {
+  }
+  
+  .App-item-tareasAdmin:hover {
     transform: translateY(-3px);
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.App-texto-tareasAdmin {
+  }
+  
+  .App-texto-tareasAdmin {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 5px;
-}
-
-.App-descripcion-tareasAdmin {
+  }
+  
+  .App-descripcion-tareasAdmin {
     font-size: 16px;
     color: #666;
     margin-bottom: 10px;
-}
-
-.App-asignado-tareasAdmin {
+  }
+  
+  .App-asignado-tareasAdmin {
     font-size: 14px;
     color: #555;
     margin-bottom: 10px;
-}
-
-/* Mejora en los botones de eliminar */
-.App-btn-eliminar-tareasAdmin {
+  }
+  
+  .App-btn-eliminar-tareasAdmin {
     background-color: #dc3545;
     color: white;
     padding: 8px 12px;
@@ -110,21 +191,22 @@
     cursor: pointer;
     margin-top: 10px;
     transition: background-color 0.3s ease;
-}
-
-.App-btn-eliminar-tareasAdmin:hover {
+  }
+  .App-btn-eliminar-tareasAdmin:hover {
     background-color: #b02a37;
-}
-
-.App-btn-eliminar-tareasAdmin:focus {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
-}
-
-/* Estilo para la fecha límite */
-.App-fecha-tareasAdmin {
+  }
+  
+  .App-fecha-tareasAdmin {
     font-size: 14px;
     font-weight: bold;
     color: #333;
     margin-top: 10px;
-}
+  }
+  
+  .form-col {
+    text-align: start;
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+  }

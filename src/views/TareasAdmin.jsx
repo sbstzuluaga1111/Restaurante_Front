@@ -1,49 +1,84 @@
 import { useState, useEffect, useMemo } from "react";
 import Nav from "../components/Nav";
+import EditarTareaModal from "../components/EditarTareaModal";
 import "../css/Views.css/tareasAdmin.css";
 
 function TareasAdmin() {
   const [tareas, setTareas] = useState([]);
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState("");
+  const [empleadosSeleccionados, setEmpleadosSeleccionados] = useState([""]);
   const [dueDate, setDueDate] = useState("");
   const [priority, setPriority] = useState("Medium");
   const [status, setStatus] = useState("Pending");
   const [empleados, setEmpleados] = useState([]);
 
-  // 🔹 Obtener el token JWT
+  const [mostrarModalEditar, setMostrarModalEditar] = useState(false);
+  const [tareaSeleccionada, setTareaSeleccionada] = useState(null);
+
   const token = localStorage.getItem("token");
 
-  // 🔹 Memoizar `headers` para evitar re-render innecesarios
-  const headers = useMemo(() => ({
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  }), [token]); // Solo cambia si `token` cambia
+  const headers = useMemo(
+    () => ({
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    }),
+    [token]
+  );
 
-  // 🔹 Obtener todas las tareas del backend
   useEffect(() => {
     fetch("http://localhost:3010/tareas", { headers })
       .then((response) => response.json())
-      .then((data) => setTareas(data))
+      .then((data) => {
+        const tareasConUsuarios = data.map((tarea) => {
+          const assignedTo = Array.isArray(tarea.assignedTo)
+            ? tarea.assignedTo.map((usuario) => {
+                return typeof usuario === "object"
+                  ? usuario
+                  : empleados.find((e) => e.usuarioId === usuario) || {};
+              })
+            : [];
+          return { ...tarea, assignedTo };
+        });
+        setTareas(tareasConUsuarios);
+      })
       .catch((error) => console.error("Error al obtener tareas:", error));
-  }, [headers]); // Ahora `headers` es estable
+  }, [headers, empleados]);
 
-  // 🔹 Obtener la lista de empleados al cargar el componente
   useEffect(() => {
     fetch("http://localhost:3010/usuarios/empleados", { headers })
       .then((response) => response.json())
       .then((data) => setEmpleados(data))
       .catch((error) => console.error("Error al obtener empleados:", error));
-  }, [headers]); // Ahora `headers` es estable
+  }, [headers]);
 
-  // 🔹 Agregar nueva tarea
+  const agregarSelectEmpleado = () => {
+    setEmpleadosSeleccionados([...empleadosSeleccionados, ""]);
+  };
+
+  const eliminarSelectEmpleado = (index) => {
+    const nuevos = empleadosSeleccionados.filter((_, i) => i !== index);
+    setEmpleadosSeleccionados(nuevos);
+  };
+
+  const cambiarEmpleadoSeleccionado = (index, value) => {
+    const nuevos = [...empleadosSeleccionados];
+    nuevos[index] = value;
+    setEmpleadosSeleccionados(nuevos);
+  };
+
   const agregarTarea = () => {
-    if (titulo.trim() !== "" && descripcion.trim() !== "" && empleadoSeleccionado && dueDate.trim() !== "") {
+    const empleadosValidos = empleadosSeleccionados.filter((id) => id !== "");
+    if (
+      titulo.trim() !== "" &&
+      descripcion.trim() !== "" &&
+      empleadosValidos.length > 0 &&
+      dueDate.trim() !== ""
+    ) {
       const nuevaTareaObj = {
         title: titulo,
         description: descripcion,
-        assignedTo: [parseInt(empleadoSeleccionado)], // Enviar usuarioId
+        assignedTo: empleadosValidos.map((id) => parseInt(id)),
         priority,
         status,
         dueDate,
@@ -56,15 +91,17 @@ function TareasAdmin() {
       })
         .then((response) => response.json())
         .then((data) => {
-          const usuarioAsignado = empleados.find(emp => emp.usuarioId === parseInt(empleadoSeleccionado));
-          const tareaConUsuario = {
+          const usuariosAsignados = empleados.filter((emp) =>
+            empleadosValidos.includes(emp.usuarioId.toString())
+          );
+          const tareaConUsuarios = {
             ...data,
-            assignedTo: usuarioAsignado ? [usuarioAsignado] : [],
+            assignedTo: usuariosAsignados,
           };
-          setTareas([...tareas, tareaConUsuario]);
+          setTareas([...tareas, tareaConUsuarios]);
           setTitulo("");
           setDescripcion("");
-          setEmpleadoSeleccionado("");
+          setEmpleadosSeleccionados([""]);
           setDueDate("");
           setPriority("Medium");
           setStatus("Pending");
@@ -73,7 +110,6 @@ function TareasAdmin() {
     }
   };
 
-  // 🔹 Eliminar tarea
   const eliminarTarea = (customId) => {
     fetch(`http://localhost:3010/tareas/${customId}`, {
       method: "DELETE",
@@ -85,44 +121,135 @@ function TareasAdmin() {
       .catch((error) => console.error("Error al eliminar tarea:", error));
   };
 
+  const abrirModalEditar = (tarea) => {
+    setTareaSeleccionada({
+      ...tarea,
+      assignedTo: Array.isArray(tarea.assignedTo)
+        ? tarea.assignedTo.map((e) => {
+            if (typeof e === "object" && e !== null && e.usuarioId !== undefined) {
+              return e;
+            } else if (typeof e === "number") {
+              const emp = empleados.find((emp) => emp.usuarioId === e);
+              return emp || { usuarioId: e };
+            } else {
+              return { usuarioId: "" };
+            }
+          })
+        : [],
+    });
+    setMostrarModalEditar(true);
+  };
+
   return (
-    <div className="App-tareasAdmin">
+    <div className="App-tareasAdmin ">
       <Nav />
       <header className="App-header-tareasAdmin">
-        <h1>Tareas</h1>
-        <div className="App-form-tareasAdmin">
-          <input type="text" placeholder="Título de la tarea" value={titulo} onChange={(e) => setTitulo(e.target.value)} className="App-input-tareasAdmin" />
-          <input type="text" placeholder="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} className="App-input-tareasAdmin" />
+        <h1>Agregar Tareas</h1>
 
-          {/* Selección de empleado */}
-          <select value={empleadoSeleccionado} onChange={(e) => setEmpleadoSeleccionado(e.target.value)} className="App-input-tareasAdmin">
-            <option value="">Seleccionar empleado</option>
-            {empleados.map((empleado) => (
-              <option key={empleado.usuarioId} value={empleado.usuarioId}>
-                {empleado.nickname} ({empleado.email})
-              </option>
-            ))}
-          </select>
+        <div className="App-form-tareasAdmin-wrapper">
+          <div className="App-form-tareasAdmin formato-grupo-label">
+            <div className="form-row">
+              <div className="form-col">
+                <label>Título:</label>
+                <input
+                  type="text"
+                  placeholder="Título de la tarea"
+                  value={titulo}
+                  onChange={(e) => setTitulo(e.target.value)}
+                  className="App-input-tareasAdmin"
+                />
+              </div>
+              <div className="form-col">
+                <label>Descripción:</label>
+                <input
+                  type="text"
+                  placeholder="Descripción"
+                  value={descripcion}
+                  onChange={(e) => setDescripcion(e.target.value)}
+                  className="App-input-tareasAdmin"
+                />
+              </div>
+            </div>
 
-          {/* Selección de prioridad */}
-          <select value={priority} onChange={(e) => setPriority(e.target.value)} className="App-input-tareasAdmin">
-            <option value="Low">Baja</option>
-            <option value="Medium">Media</option>
-            <option value="High">Alta</option>
-          </select>
+            <div className="form-group">
+              <label>Asignar empleados:</label>
+              <div className="form-column empleados-container">
+                {empleadosSeleccionados.map((empleado, index) => (
+                  <div key={index} className="empleado-select-row">
+                    <select
+                      value={empleado}
+                      onChange={(e) => cambiarEmpleadoSeleccionado(index, e.target.value)}
+                      className="App-input-tareasAdmin"
+                    >
+                      <option value="">Seleccionar empleado</option>
+                      {empleados.map((emp) => (
+                        <option key={emp.usuarioId} value={emp.usuarioId}>
+                          {emp.nickname} ({emp.email})
+                        </option>
+                      ))}
+                    </select>
+                    {empleadosSeleccionados.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => eliminarSelectEmpleado(index)}
+                        className="btn-eliminar-select"
+                      >
+                        ❌
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={agregarSelectEmpleado}
+                  className="btn-agregar-select"
+                >
+                  ➕ Agregar empleado
+                </button>
+              </div>
+            </div>
 
-          {/* Selección de estado */}
-          <select value={status} onChange={(e) => setStatus(e.target.value)} className="App-input-tareasAdmin">
-            <option value="Pending">Pendiente</option>
-            <option value="In Progress">En progreso</option>
-            <option value="Completed">Completada</option>
-            <option value="Cancelled">Cancelada</option>
-          </select>
+            <div className="form-row">
+              <div className="form-col">
+                <label>Prioridad:</label>
+                <select
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value)}
+                  className="App-input-tareasAdmin"
+                >
+                  <option value="Low">Baja</option>
+                  <option value="Medium">Media</option>
+                  <option value="High">Alta</option>
+                </select>
+              </div>
+              <div className="form-col">
+                <label>Estado:</label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="App-input-tareasAdmin"
+                >
+                  <option value="Pending">Pendiente</option>
+                  <option value="In Progress">En progreso</option>
+                  <option value="Completed">Completada</option>
+                  <option value="Cancelled">Cancelada</option>
+                </select>
+              </div>
+            </div>
 
-          {/* Fecha de vencimiento */}
-          <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="App-input-tareasAdmin" />
-
-          <button onClick={agregarTarea} className="App-btn-agregar-tareasAdmin"> Agregar </button>
+            <div className="form-row">
+              <label>Fecha de entrega:</label>
+              <input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="App-input-tareasAdmin"
+              />
+              <button onClick={agregarTarea} className="App-btn-agregar-tareasAdmin">
+                Agregar
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="App-list-tareasAdmin">
@@ -131,7 +258,6 @@ function TareasAdmin() {
               <p className="App-texto-tareasAdmin"><strong>{tarea.title}</strong></p>
               <p className="App-descripcion-tareasAdmin">{tarea.description}</p>
 
-              {/* Muestra los empleados asignados */}
               <div className="App-asignado-tareasAdmin">
                 <strong>Asignado a:</strong>
                 {tarea.assignedTo.length > 0 ? (
@@ -150,9 +276,24 @@ function TareasAdmin() {
               <p className="App-fecha-tareasAdmin"><strong>Fecha límite:</strong> {new Date(tarea.dueDate).toLocaleDateString()}</p>
 
               <button onClick={() => eliminarTarea(tarea.customId)} className="App-btn-eliminar-tareasAdmin">Eliminar</button>
+              <button onClick={() => abrirModalEditar(tarea)} className="App-btn-editar-tareasAdmin">Editar</button>
             </div>
           ))}
         </div>
+
+        {mostrarModalEditar && tareaSeleccionada && (
+          <EditarTareaModal
+            tarea={tareaSeleccionada}
+            onClose={() => setMostrarModalEditar(false)}
+            onUpdate={(tareaActualizada) => {
+              setTareas((prev) =>
+                prev.map((t) => (t.customId === tareaActualizada.customId ? tareaActualizada : t))
+              );
+              setMostrarModalEditar(false);
+            }}
+            empleados={empleados}
+          />
+        )}
       </header>
     </div>
   );

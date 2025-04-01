@@ -10,6 +10,7 @@ import Admin from "./views/Admin";
 import Empleado from "./views/Empleado";
 import Footer from './components/Footer';
 import ProtectedRoute from "./routes/ProtectedRoute.js";
+import TareasEmpleado from './views/TareasEmpleado.jsx';
 //import ProtectedRouteMulti from "./routes/ProtectedRouteMulti.js";
 import TareasAdmin from './views/TareasAdmin.jsx';
 
@@ -32,6 +33,11 @@ function App() {
           {/*<Route element={<ProtectedRouteMulti allowedRoles={[1, 2]} />}>*/}
           <Route element={<ProtectedRoute requiredRole={1} />}>
             <Route path='/gestion-tareas' element={<TareasAdmin />} />
+          </Route>
+
+  {/*element={<ProtectedRoute requiredRole={2}*/}
+          <Route>
+            <Route path='/Tareas' element={<TareasEmpleado />} />
           </Route>
 
           <Route element={<ProtectedRoute requiredRole={2} />}>

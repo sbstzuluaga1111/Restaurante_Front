@@ -71,11 +71,18 @@ function Nav() {
 
         {/* 🔹 EMPLEADO (role 2) o ADMIN (role 1) pueden ver "Tareas" */}
         {(isEmpleado || isAdmin) && (
-          <Link className='App-header-nav-derecha-links' to="/gestion-tareas">
-            <button className={`App-header-nav-derecha-button ${location.pathname === "/gestion-tareas" ? "active" : ""}`}>
-              Tareas
-            </button>
-          </Link>
+         <Link
+         className="App-header-nav-derecha-links"
+         to={isAdmin ? "/gestion-tareas" : "/tareas"}
+       >
+         <button
+           className={`App-header-nav-derecha-button ${
+             location.pathname === (isAdmin ? "/gestion-tareas" : "/tareas") ? "active" : ""
+           }`}
+         >
+           Tareas
+         </button>
+       </Link>       
         )}
 
         {/* 🔹 TODOS LOS AUTENTICADOS pueden cerrar sesión */}

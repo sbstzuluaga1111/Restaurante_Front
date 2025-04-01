@@ -1,0 +1,129 @@
+/* Modal base */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    overflow-y: auto;
+    max-height: 90vh;
+  }
+  
+  /* Formulario */
+  .modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .modal-content label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #444;
+  }
+  
+  .App-input-tareasAdmin {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s ease;
+  }
+  
+  .App-input-tareasAdmin:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Botones modal */
+  .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .App-btn-agregar-tareasAdmin {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .App-btn-agregar-tareasAdmin:hover {
+    background-color: #218838;
+  }
+  
+  .App-btn-eliminar-tareasAdmin {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .App-btn-eliminar-tareasAdmin:hover {
+    background-color: #c82333;
+  }
+  
+  /* Selects de empleados */
+  .empleado-select-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .btn-agregar-select {
+    margin-top: 5px;
+    font-size: 14px;
+    background-color: #17a2b8;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .btn-agregar-select:hover {
+    background-color: #138496;
+  }
+  
+  .btn-eliminar-select {
+    font-size: 18px;
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 2px 6px;
+  }
+  
+  .btn-eliminar-select:hover {
+    color: #bd2130;
+  }
+  
