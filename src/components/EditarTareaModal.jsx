@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "../css/EditarTareaModal.css";
 
 function EditarTareaModal({ tarea, onClose, onUpdate, empleados }) {
