@@ -34,8 +34,8 @@ function App() {
           <Route element={<ProtectedRoute requiredRole={1} />}>
             <Route path='/gestion-tareas' element={<TareasAdmin />} />
           </Route>
-
-  {/*element={<ProtectedRoute requiredRole={2}*/}
+          {/*element={<ProtectedRoute requiredRole={2}*/}
+          
           <Route>
             <Route path='/Tareas' element={<TareasEmpleado />} />
           </Route>
