@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "../css/EditarTareaModal.css";
 
 function EditarTareaModal({ tarea, onClose, onUpdate, empleados }) {
@@ -35,9 +35,9 @@ function EditarTareaModal({ tarea, onClose, onUpdate, empleados }) {
 
   const guardarCambios = () => {
     const empleadosValidos = empleadosSeleccionados.filter((id) => id !== "");
+
     if (titulo.trim() && descripcion.trim() && empleadosValidos.length && dueDate.trim()) {
       const tareaActualizada = {
-        ...tarea,
         title: titulo,
         description: descripcion,
         assignedTo: empleadosValidos.map((id) => parseInt(id)),
@@ -46,21 +46,34 @@ function EditarTareaModal({ tarea, onClose, onUpdate, empleados }) {
         dueDate,
       };
 
+      console.log("Enviando PUT con:", tareaActualizada);
+
       fetch(`http://localhost:3010/tareas/${tarea.customId}`, {
         method: "PUT",
         headers,
         body: JSON.stringify(tareaActualizada),
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`Error HTTP: ${res.status}`);
+          }
+          return res.json();
+        })
         .then((data) => {
+          console.log("Tarea actualizada en backend:", data);
+
+          // Reconstruye la relación con los usuarios asignados
           const usuariosAsignados = empleados.filter((emp) =>
             empleadosValidos.includes(emp.usuarioId.toString())
           );
+
           const tareaConUsuarios = {
             ...data,
             assignedTo: usuariosAsignados,
           };
+
           onUpdate(tareaConUsuarios);
+          onClose();
         })
         .catch((err) => console.error("Error al actualizar tarea:", err));
     }

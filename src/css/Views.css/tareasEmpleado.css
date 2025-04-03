@@ -1,58 +1,163 @@
+.App-tareasEmpleado {
+  text-align: center;
+}
+
+.App-header-tareasEmpleado {
+  padding-top: 5%;
+  background-color: #282c34;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+/* CONTENEDOR GENERAL */
 .tareas-empleado-container {
-    padding: 20px;
-    max-width: 900px;
-    margin: auto;
-  }
-  
-  .tareas-empleado-container h2 {
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-  }
-  
-  .tareas-listado {
-    display: grid;
-    gap: 20px;
-  }
-  
-  /* Estilos para las tarjetas de tarea */
-  .tarea-card {
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #f8f9fa;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .tarea-card h3 {
-    margin-top: 0;
-    color: #007bff;
-  }
-  
-  .tarea-card .descripcion {
-    color: #555;
-    margin-bottom: 10px;
-  }
-  
-  /* Colores por estado */
-  .tarea-card.Pending {
-    border-left: 6px solid #ffc107;
-  }
-  
-  .tarea-card["In Progress"] {
-    border-left: 6px solid #17a2b8;
-  }
-  
-  .tarea-card.Completed {
-    border-left: 6px solid #28a745;
-  }
-  
-  .tarea-card.Cancelled {
-    border-left: 6px solid #dc3545;
-  }
-  
-  .cargando {
-    text-align: center;
-    padding: 30px;
-    font-size: 18px;
-  }
-  
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.tareas-empleado-container h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* TABLERO PRINCIPAL */
+.tareas-board {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem;
+  flex-wrap: wrap;
+}
+
+/* COLUMNA INDIVIDUAL */
+.columna-tareas {
+  flex: 1;
+  min-width: 400px;
+  max-width: 600px;
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.columna-tareas h3 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #111827;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* CUANDO SE ACTIVA DROPPABLE */
+.columna-tareas.drop-activa {
+  outline: 3px dashed #4f46e5;
+  background-color: #e0e7ff;
+}
+
+/* COLORES POR ESTADO */
+.columna-tareas.pending {
+  background-color: #fef9c3;
+}
+.columna-tareas.in-progress {
+  background-color: #e0f2fe;
+}
+.columna-tareas.completed {
+  background-color: #dcfce7;
+}
+.columna-tareas.cancelled {
+  background-color: #fce7f3;
+}
+
+/* LISTADO DE TAREAS (DROPPABLE) */
+.tareas-listado {
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 6px;
+  scroll-behavior: smooth;
+}
+
+/* TARJETA DE TAREA */
+.tarea-card {
+  padding: 1px;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  color: black;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarea-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.tarea-card h4 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+.tarea-card p {
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+  color: #374151;
+}
+
+/* BORDES POR ESTADO */
+.tarea-card.pending {
+  border-left: 5px solid #facc15;
+}
+.tarea-card.in-progress {
+  border-left: 5px solid #3b82f6;
+}
+.tarea-card.completed {
+  border-left: 5px solid #10b981;
+}
+.tarea-card.cancelled {
+  border-left: 5px solid #ef4444;
+}
+
+/* VISTA PREVIA DRAG */
+.drag-preview {
+  opacity: 0.8;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  transform: rotate(1deg);
+}
+
+/* GUIA DE DROP */
+.drop-guide {
+  padding: 12px;
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  text-align: center;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #555;
+  pointer-events: none;
+}
+
+/* CARGANDO */
+.cargando {
+  text-align: center;
+  padding: 30px;
+  font-size: 18px;
+}
