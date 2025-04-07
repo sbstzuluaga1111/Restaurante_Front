@@ -137,3 +137,18 @@
 .logout-button:hover {
   background-color: #c9302c;
 }
+
+
+.user-greeting-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+}

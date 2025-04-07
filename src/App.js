@@ -13,6 +13,8 @@ import ProtectedRoute from "./routes/ProtectedRoute.js";
 import TareasEmpleado from './views/TareasEmpleado.jsx';
 //import ProtectedRouteMulti from "./routes/ProtectedRouteMulti.js";
 import TareasAdmin from './views/TareasAdmin.jsx';
+import CrearUsuario from './views/CrearUsuario.jsx';
+
 
 function App() {
   return (
@@ -35,6 +37,10 @@ function App() {
             <Route path='/gestion-tareas' element={<TareasAdmin />} />
           </Route>
           {/*element={<ProtectedRoute requiredRole={2}*/}
+
+          <Route element={<ProtectedRoute requiredRole={1} />}>
+            <Route path="/crear-usuario" element={<CrearUsuario />} />
+          </Route>
           
           <Route>
             <Route path='/Tareas' element={<TareasEmpleado />} />

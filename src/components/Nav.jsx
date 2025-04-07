@@ -37,7 +37,16 @@ function Nav() {
     </Link>
 
       {/* 🔹 Mostrar saludo solo si hay usuario autenticado */}
-      {isAuthenticated && <span className="user-greeting">Hola, {user?.nickname || user?.email}!</span>}
+      {isAuthenticated && (
+          <div className="user-greeting-container">
+            <img
+              src={`http://localhost:3010${user?.imagen || "/uploads/default.png"}`}
+              alt="Perfil"
+              className="user-avatar"
+            />
+            <span className="user-greeting">Hola, {user?.nickname || user?.email}!</span>
+          </div>
+        )}
 
       <div className="App-header-nav-derecha">
         {/* 🔹 CLIENTE (No autenticado) o ADMIN (role 1) */}
@@ -69,20 +78,36 @@ function Nav() {
           </>
         )}
 
-        {/* 🔹 EMPLEADO (role 2) o ADMIN (role 1) pueden ver "Tareas" */}
-        {(isEmpleado || isAdmin) && (
-         <Link
-         className="App-header-nav-derecha-links"
-         to={isAdmin ? "/gestion-tareas" : "/tareas"}
-       >
-         <button
-           className={`App-header-nav-derecha-button ${
-             location.pathname === (isAdmin ? "/gestion-tareas" : "/tareas") ? "active" : ""
-           }`}
-         >
-           Tareas
-         </button>
-       </Link>       
+                {/* 🔹 EMPLEADO (role 2) o ADMIN (role 1) pueden ver "Tareas" */}
+                {(isEmpleado || isAdmin) && (
+          <Link
+            className="App-header-nav-derecha-links"
+            to={isAdmin ? "/gestion-tareas" : "/tareas"}
+          >
+            <button
+              className={`App-header-nav-derecha-button ${
+                location.pathname === (isAdmin ? "/gestion-tareas" : "/tareas") ? "active" : ""
+              }`}
+            >
+              Tareas
+            </button>
+          </Link>
+        )}
+
+        {/* 🔹 SOLO ADMIN puede ver "Crear Usuario" */}
+        {isAdmin && (
+          <Link
+            className="App-header-nav-derecha-links"
+            to="/crear-usuario"
+          >
+            <button
+              className={`App-header-nav-derecha-button ${
+                location.pathname === "/crear-usuario" ? "active" : ""
+              }`}
+            >
+              Crear Usuario
+            </button>
+          </Link>
         )}
 
         {/* 🔹 TODOS LOS AUTENTICADOS pueden cerrar sesión */}
