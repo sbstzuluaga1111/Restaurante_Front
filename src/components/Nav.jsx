@@ -5,6 +5,7 @@ import Imagen from "../resource/Imgs/imagen3.png";
 import Carrito from "../resource/Imgs/carrito.png";
 import Perfil from "../resource/Imgs/perfil.png";
 import Menu from "../resource/Imgs/menu.png";
+import PerfilModal from "./PerfilModal"; // asegúrate que la ruta sea correcta
 
 import "../css/Nav.css";
 
@@ -26,6 +27,29 @@ function Nav() {
     navigate("/"); // 📌 Redirigir después del logout
   };
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleSave = async (formData) => {
+    try {
+      const res = await fetch(`http://localhost:3010/usuario/${user.usuarioId}`, {
+        method: "PUT",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
+      if (!res.ok) throw new Error("Error al actualizar");
+  
+      const updatedUser = await res.json();
+      console.log("Usuario actualizado:", updatedUser);
+      setShowModal(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
+
   return (
     <div className="App-header-nav">
       {/* 🔹 Logo (Siempre visible) */}
@@ -40,10 +64,15 @@ function Nav() {
       {isAuthenticated && (
           <div className="user-greeting-container">
             <img
-              src={`http://localhost:3010${user?.imagen || "/uploads/default.png"}`}
-              alt="Perfil"
-              className="user-avatar"
-            />
+                onClick={() => setShowModal(true)}
+                src={user?.imagen ? `http://localhost:3010${user.imagen}` : "http://localhost:3010/uploads/default.png"}
+                alt="Perfil"
+                className="user-avatar"
+              />
+
+              {showModal && (
+                <PerfilModal user={user} onClose={() => setShowModal(false)} onSave={handleSave} />
+              )}
             <span className="user-greeting">Hola, {user?.nickname || user?.email}!</span>
           </div>
         )}

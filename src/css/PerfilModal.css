@@ -1,0 +1,123 @@
+.perfil-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.perfil-modal-card {
+  background: white;
+  border-radius: 1.2rem;
+  padding: 1.5rem 2rem;
+  width: 380px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  font-size: 1.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.perfil-modal-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.perfil-modal-header h2 {
+  color: #1f1f1f; /* Un gris oscuro elegante */
+  font-size: 1.4rem;
+  margin-bottom: 0.3rem;
+}
+
+
+.avatar-preview {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+  border: 3px solid #eee;
+}
+
+.perfil-role {
+  font-size: 0.85rem;
+  color: gray;
+  margin-top: 0.2rem;
+}
+
+.perfil-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.perfil-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.perfil-form input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.6rem;
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+}
+
+.file-label input {
+  margin-top: 0.4rem;
+}
+
+.btn-guardar {
+  background-color: #1f7aff;
+  color: white;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+
+.btn-guardar:hover {
+  background-color: #155edb;
+}
+
+.mini-preview {
+  margin: 0.5rem auto; /* 🔥 Esto la centra horizontalmente */
+  display: block;      /* Necesario para que funcione el "auto" */
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
