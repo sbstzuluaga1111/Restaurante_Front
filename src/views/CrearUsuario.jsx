@@ -20,7 +20,7 @@ function CrearUsuario() {
   });
   const [imagen, setImagen] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [mensaje, setMensaje] = useState("");
+  const [mensaje] = useState("");
 
   const handleChange = (e) => {
     setFormData((prev) => ({
