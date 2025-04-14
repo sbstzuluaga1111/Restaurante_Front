@@ -3,16 +3,46 @@
 }
 
 .App-header-home {
-  padding-top: 5%;
   background-color: #282c34;
-  min-height: 90vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+.circle-container {
+  width: 30%; /* 👍 Tamaño relativo al contenedor padre */
+  height: 550px;
+  background-color: rgba(255, 255, 255, 0.37);
+  border-radius: 50%; /* círculo perfecto (usa 50% aquí, no 500rem) */
+  position: relative; /* necesario para manejar bien la imagen adentro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* Ajustamos la imagen dentro del círculo */
+.circle-image {
+  width: 80%; /* que la imagen no ocupe todo */
+  height: auto;
+  object-fit: contain;
+  opacity: 0.9;
+}
+
+/* En pantallas pequeñas (responsive) */
+@media (max-width: 768px) {
+  .circle-container {
+    width: 60%; /* 👍 Tamaño relativo al contenedor padre */
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+  }
+}
+
+
 
 .App-header-home-1 {
   background-color: #2a56ad;
@@ -51,12 +81,22 @@
   background-color: rgb(189, 36, 36);
   color: black;
   padding: 2%;
-  width: 40%;
   height: 400px; 
   border-radius: 1rem;
   display: flex;
+  margin: 5%;
   justify-content: center;
   align-items: center;
+}
+
+.App-header-home-1-subcontainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  background-color: #0a3cff;
+  border-radius: 2rem;
 }
 
 
@@ -64,7 +104,9 @@
   background-color: white;
   color: black;
   padding: 2%;
-  width: 50%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  width: 40%;
   border-radius: 1rem;
 }
 

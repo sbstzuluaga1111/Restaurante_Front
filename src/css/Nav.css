@@ -1,7 +1,7 @@
 .App-header-nav {
   position: fixed;
   width: 100%;
-  background-color: #336fa198;
+  background-color: #24486698;
   min-height: 10vh;
   display: flex;
   align-items: center;
@@ -9,6 +9,7 @@
   font-size: calc(10px + 2vmin);
   color: white;
   margin-bottom: 400px;
+  z-index: 1000;
 }
 
 .App-header-nav-izquierda {
@@ -19,6 +20,27 @@
   padding: 2px;
   height: 70px;
   border-radius: 0.5rem;
+}
+
+
+/* En pantallas pequeñas (responsive) */
+@media (max-width: 768px) {
+  .App-header-nav-izquierda {
+    width: 18%; /* 👈 Aumentamos el ancho en dispositivos móviles */
+  }
+  .App-header-nav-derecha {
+    width: 30%;
+  }
+}
+
+/* Puedes ajustar para celulares más pequeños */
+@media (max-width: 480px) {
+  .App-header-nav-izquierda {
+    width: 25%; /* 👈 Aumenta aún más en móviles muy pequeños */
+  }
+  .App-header-nav-derecha {
+    width: 40%;
+  }
 }
 
 .App-header-nav-derecha {
