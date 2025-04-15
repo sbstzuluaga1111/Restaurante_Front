@@ -1,18 +1,4 @@
-.logout-button {
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background 0.3s ease-in-out;
-  }
-  
-  .logout-button:hover {
-    background-color: #c9302c;
-  }
+
 
   .App-home {
     text-align: center;

@@ -31,29 +31,31 @@ function CrearUsuario() {
 
   const handleImagen = (e) => {
     const file = e.target.files[0];
-    setImagen(file);
-    setPreview(URL.createObjectURL(file)); // Preview imagen
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagen(reader.result); // Guardamos el base64
+        setPreview(reader.result); // Lo usamos también como preview
+      };
+      reader.readAsDataURL(file); // Lee el archivo como base64
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     try {
-      const data = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        data.append(key, value);
-      });
-      if (imagen) {
-        data.append("imagen", imagen);
-      }
+      const data = {
+        ...formData,
+        imagen, // base64 directamente
+      };
   
       await axios.post("http://localhost:3010/usuario", data, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      
   
       Swal.fire({
         icon: "success",
@@ -74,8 +76,7 @@ function CrearUsuario() {
         confirmButtonColor: "#d33",
       });
     }
-  };
-  
+  };  
 
   if (user?.role !== 1) {
     navigate("/error");

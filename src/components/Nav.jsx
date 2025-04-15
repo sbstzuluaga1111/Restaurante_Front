@@ -10,39 +10,65 @@ import PerfilModal from "./PerfilModal"; // asegúrate que la ruta sea correcta
 import "../css/Nav.css";
 
 function Nav() {
-  const { user, logout, updateUser  } = useAuth(); // 📌 Usamos el contexto de autenticación
+  const { user, logout, updateUser } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation(); // Obtiene la ruta actual
+  const location = useLocation();
 
   const [isAuthenticated, setIsAuthenticated] = useState(!!user);
-  const isAdmin = user?.role === 1; // 👑 Es Admin
-  const isEmpleado = user?.role === 2; // 👷‍♂️ Es Empleado
+  const [userData, setUserData] = useState(null); // 🔥 Datos completos del usuario (incluye imagen)
+  const [showModal, setShowModal] = useState(false);
+
+  const isAdmin = user?.role === 1;
+  const isEmpleado = user?.role === 2;
 
   useEffect(() => {
-    setIsAuthenticated(!!user); // 📌 Se actualizará si cambia el usuario
+    setIsAuthenticated(!!user);
+  }, [user]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch(`http://localhost:3010/usuario/${user.usuarioId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("No se pudo obtener el usuario");
+
+        const data = await res.json();
+        setUserData(data); // Guardamos los datos con imagen base64
+      } catch (error) {
+        console.error("Error al obtener el usuario:", error);
+      }
+    };
+
+    if (user) {
+      fetchUserData();
+    }
   }, [user]);
 
   const handleLogout = () => {
-    logout(); // 📌 Llamamos a logout() del contexto
-    navigate("/"); // 📌 Redirigir después del logout
+    logout();
+    navigate("/");
   };
 
-  const [showModal, setShowModal] = useState(false);
-
-  const handleSave = async (formData) => {
+  const handleSave = async (userDataJSON) => {
     try {
       const res = await fetch(`http://localhost:3010/usuario/${user.usuarioId}`, {
         method: "PUT",
-        body: formData,
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+        body: JSON.stringify(userDataJSON),
       });
   
       if (!res.ok) throw new Error("Error al actualizar");
   
       const updatedUser = await res.json();
-      updateUser(updatedUser); // 🔥 Actualizamos el contexto manualmente
+      updateUser(updatedUser);
+      setUserData(updatedUser);
       setShowModal(false);
       console.log("Usuario actualizado:", updatedUser);
     } catch (err) {
@@ -53,33 +79,36 @@ function Nav() {
 
   return (
     <div className="App-header-nav">
-      {/* 🔹 Logo (Siempre visible) */}
-    <Link 
-      className="App-header-nav-izquierda" 
-      to={!isAuthenticated ? "/" : isAdmin ? "/admin" : "/empleado"}
-    >
-      <img className="App-header-nav-logo" src={Imagen} alt="Logo" />
-    </Link>
+      {/* 🔹 Logo */}
+      <Link 
+        className="App-header-nav-izquierda" 
+        to={!isAuthenticated ? "/" : isAdmin ? "/admin" : "/empleado"}
+      >
+        <img className="App-header-nav-logo" src={Imagen} alt="Logo" />
+      </Link>
 
-      {/* 🔹 Mostrar saludo solo si hay usuario autenticado */}
+      {/* 🔹 Perfil de usuario autenticado */}
       {isAuthenticated && (
-          <div className="user-greeting-container">
-            <img
-                onClick={() => setShowModal(true)}
-                src={user?.imagen ? `http://localhost:3010${user.imagen}` : "http://localhost:3010/uploads/default.png"}
-                alt="Perfil"
-                className="user-avatar"
-              />
+        <div className="user-greeting-container">
+          <img
+            onClick={() => setShowModal(true)}
+            src={
+              userData?.imagen
+                ? userData.imagen
+                : "http://localhost:3010/uploads/default.png"
+            }                        
+            alt="Perfil"
+            className="user-avatar"
+          />
 
-              {showModal && (
-                <PerfilModal user={user} onClose={() => setShowModal(false)} onSave={handleSave} />
-              )}
-            <span className="user-greeting">Hola, {user?.nickname || user?.email}!</span>
-          </div>
-        )}
+          {showModal && (
+            <PerfilModal user={userData} onClose={() => setShowModal(false)} onSave={handleSave} />
+          )}
+          <span className="user-greeting">Hola, {user?.nickname || user?.email}!</span>
+        </div>
+      )}
 
       <div className="App-header-nav-derecha">
-        {/* 🔹 CLIENTE (No autenticado) o ADMIN (role 1) */}
         {(!isAuthenticated || isAdmin) && (
           <>
             <Link className='App-header-nav-derecha-links' to="/menu">
@@ -89,7 +118,6 @@ function Nav() {
               </button>
             </Link>
 
-            {/* 🔥 SOLO SE MUESTRA "Administración" SI NO HAY USUARIO AUTENTICADO */}
             {!isAuthenticated && (
               <Link className='App-header-nav-derecha-links' to="/login">
                 <button className={`App-header-nav-derecha-button ${location.pathname === "/login" ? "active" : ""}`}>
@@ -108,8 +136,7 @@ function Nav() {
           </>
         )}
 
-                {/* 🔹 EMPLEADO (role 2) o ADMIN (role 1) pueden ver "Tareas" */}
-                {(isEmpleado || isAdmin) && (
+        {(isEmpleado || isAdmin) && (
           <Link
             className="App-header-nav-derecha-links"
             to={isAdmin ? "/gestion-tareas" : "/tareas"}
@@ -124,23 +151,14 @@ function Nav() {
           </Link>
         )}
 
-        {/* 🔹 SOLO ADMIN puede ver "Crear Usuario" */}
         {isAdmin && (
-          <Link
-            className="App-header-nav-derecha-links"
-            to="/crear-usuario"
-          >
-            <button
-              className={`App-header-nav-derecha-button ${
-                location.pathname === "/crear-usuario" ? "active" : ""
-              }`}
-            >
+          <Link className="App-header-nav-derecha-links" to="/crear-usuario">
+            <button className={`App-header-nav-derecha-button ${location.pathname === "/crear-usuario" ? "active" : ""}`}>
               Crear Usuario
             </button>
           </Link>
         )}
 
-        {/* 🔹 TODOS LOS AUTENTICADOS pueden cerrar sesión */}
         {isAuthenticated && (
           <button className="logout-button" onClick={handleLogout}>
             Cerrar Sesión

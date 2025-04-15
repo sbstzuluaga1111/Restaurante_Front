@@ -63,7 +63,7 @@ function App() {
 // ✅ Función para ocultar el Footer en ciertas rutas
 function FooterVisibility() {
   const location = useLocation();
-  const hideFooterOn = ["/error"];
+  const hideFooterOn = ["/error","/login"];
   return !hideFooterOn.includes(location.pathname) ? <Footer /> : null;
 }
 
