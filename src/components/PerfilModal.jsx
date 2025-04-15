@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { FiEdit } from "react-icons/fi";
 import "../css/PerfilModal.css";
 
 function PerfilModal({ user, onClose, onSave }) {
@@ -73,7 +74,24 @@ function PerfilModal({ user, onClose, onSave }) {
         <button className="close-button" onClick={onClose}>×</button>
 
         <div className="perfil-modal-header">
-          <img src={previewImg} alt="Avatar" className="avatar-preview" />
+                  <div className="avatar-container">
+            <img src={previewImg} alt="Avatar" className="avatar-preview" />
+            <button
+              type="button"
+              className="edit-avatar-btn"
+              onClick={() => document.getElementById("fileInput").click()}
+            >
+              <FiEdit size={14} />
+            </button>
+            <input
+              type="file"
+              id="fileInput"
+              name="imagen"
+              style={{ display: "none" }}
+              onChange={handleChange}
+              accept="image/*"
+            />
+          </div>
           <h2>Editar perfil</h2>
           <p className="perfil-role">Rol actual: {user.role === 1 ? "Admin" : "Empleado"}</p>
         </div>
@@ -123,12 +141,7 @@ function PerfilModal({ user, onClose, onSave }) {
               placeholder="Dejar vacío para no cambiarla"
             />
           </label>
-
-          <label className="file-label">
-            Cambiar imagen:
-            <input name="imagen" type="file" onChange={handleChange} accept="image/*" />
-          </label>
-
+          
           <button type="submit" className="btn-guardar">Guardar Cambios</button>
         </form>
       </div>
