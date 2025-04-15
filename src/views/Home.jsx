@@ -1,6 +1,7 @@
 import Nav from "../components/Nav";
 import "../css/Views.css/Home.css";
-import bienvenida from "../resource/Imgs/Imagen1.jpg"
+import bienvenida from "../resource/Imgs/Imagen1.2.jpg"
+import bienvenida1 from "../resource/Imgs/Imagen1.1.jpg"
 import fondo from "../resource/Imgs/imagen-home1.jpg"
 import frase from "../resource/Imgs/imagen3.png"
 import fondoParallax from '../resource/Imgs/imagen-home2.jpg';
@@ -84,7 +85,7 @@ function Home() {
   <img className="App-header-home-1-img" src={bienvenida} alt="bienvenida" />
 </div>
 <div  className="App-header-home-1-container-1">
-  <img className="App-header-home-1-img" src={bienvenida} alt="bienvenida" />
+  <img className="App-header-home-1-img" src={bienvenida1} alt="bienvenida" />
 </div></div>
 
 <div style={{ zIndex: 2 }} className="App-header-home-1-container-2">
@@ -103,9 +104,9 @@ function Home() {
 
 
 
-{/*
+
       <header className='App-header-home-2'>
-        <h1>Home 2</h1>
+        <h1>Que ofrecemos:</h1>
 
 <div className="App-header-home-2-conjunto">
 <div className="App-header-home-2-card">
@@ -167,7 +168,7 @@ function Home() {
 
 
       </header>
-*/}
+
 
       <header className='App-header-home-3'>
         <div className="App-header-home-3-container-2">
