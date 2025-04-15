@@ -10,7 +10,7 @@ import PerfilModal from "./PerfilModal"; // asegúrate que la ruta sea correcta
 import "../css/Nav.css";
 
 function Nav() {
-  const { user, logout } = useAuth(); // 📌 Usamos el contexto de autenticación
+  const { user, logout, updateUser  } = useAuth(); // 📌 Usamos el contexto de autenticación
   const navigate = useNavigate();
   const location = useLocation(); // Obtiene la ruta actual
 
@@ -42,8 +42,9 @@ function Nav() {
       if (!res.ok) throw new Error("Error al actualizar");
   
       const updatedUser = await res.json();
-      console.log("Usuario actualizado:", updatedUser);
+      updateUser(updatedUser); // 🔥 Actualizamos el contexto manualmente
       setShowModal(false);
+      console.log("Usuario actualizado:", updatedUser);
     } catch (err) {
       console.error(err);
     }

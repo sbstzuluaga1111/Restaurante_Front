@@ -16,9 +16,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         isMounted.current = true;
-        return () => {
-            isMounted.current = false; // 🔴 Se desmonta el componente
-        };
+        return () => { isMounted.current = false; };// 🔴 Se desmonta el componente
     }, []);
 
     // ✅ Función para cerrar sesión
@@ -35,6 +33,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         localStorage.removeItem("token");
+        localStorage.removeItem("user"); // 🧹 También limpiamos el user guardado
         setUser(null);
         userRef.current = null;
 
@@ -96,15 +95,25 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        const storedUser = localStorage.getItem("user");
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
+                if (storedUser) {
+                    const parsedUser = JSON.parse(storedUser);
+                    setUser(parsedUser);
+                    userRef.current = parsedUser;
+                } else {
+                    setUser(decodedToken);
                 setUser(decodedToken);
+                    userRef.current = decodedToken;
                 userRef.current = decodedToken;
+                }
                 resetInactivityTimer();
                 validateSession(); // 🔥 Validar token al cargar la app
             } catch (error) {
                 localStorage.removeItem("token");
+                localStorage.removeItem("user");
                 setUser(null);
                 userRef.current = null;
             }
@@ -184,6 +193,7 @@ export const AuthProvider = ({ children }) => {
             const decodedToken = jwtDecode(token);
             setUser(decodedToken);
             userRef.current = decodedToken;
+            localStorage.setItem("user", JSON.stringify(decodedToken)); // ✅ guardar user
             resetInactivityTimer();
 
             // 🔥 Validar sesión con el backend
@@ -191,13 +201,21 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error("Error al decodificar el token:", error);
             localStorage.removeItem("token");
+            localStorage.removeItem("user");
         }
 
         window.dispatchEvent(new Event("storage"));
     }, [resetInactivityTimer, validateSession]);
 
+    const updateUser = (newUserData) => {
+        const updated = { ...userRef.current, ...newUserData };
+        setUser(updated);
+        userRef.current = updated;
+        localStorage.setItem("user", JSON.stringify(updated)); // ✅ actualizar localStorage
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, timeLeft }}>
+        <AuthContext.Provider value={{ user, login, logout, updateUser, timeLeft }}>
             {children}
         </AuthContext.Provider>
     );

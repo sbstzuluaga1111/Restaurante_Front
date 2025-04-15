@@ -127,13 +127,6 @@ function PerfilModal({ user, onClose, onSave }) {
           <label className="file-label">
             Cambiar imagen:
             <input name="imagen" type="file" onChange={handleChange} accept="image/*" />
-            {formData.imagen && (
-                <img
-                    src={previewImg}
-                    alt="Vista previa"
-                    className="mini-preview"
-                />
-            )}
           </label>
 
           <button type="submit" className="btn-guardar">Guardar Cambios</button>
