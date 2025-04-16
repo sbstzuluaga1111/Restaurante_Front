@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
 import "../css/PerfilModal.css";
+import Swal from "sweetalert2";
 
 function PerfilModal({ user, onClose, onSave }) {
   const [formData, setFormData] = useState({
@@ -44,9 +45,14 @@ function PerfilModal({ user, onClose, onSave }) {
         const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
   
         if (!validTypes.includes(file.type)) {
-          alert("Formato de imagen no permitido. Solo se aceptan JPG, PNG, GIF o WEBP.");
-          return; // ❌ No permitas seguir
-        }
+          Swal.fire({
+            icon: "error",
+            title: "Formato no válido",
+            text: "Solo se permiten imágenes en formato JPG, PNG, GIF o WEBP.",
+            confirmButtonColor: "#d33",
+          });
+          return;
+        }        
   
         setFormData({ ...formData, imagen: file });
         setPreviewImg(URL.createObjectURL(file));

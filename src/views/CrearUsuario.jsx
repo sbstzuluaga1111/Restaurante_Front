@@ -31,15 +31,28 @@ function CrearUsuario() {
 
   const handleImagen = (e) => {
     const file = e.target.files[0];
+  
     if (file) {
+      const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+  
+      if (!validTypes.includes(file.type)) {
+        Swal.fire({
+          icon: "error",
+          title: "Formato no válido",
+          text: "Solo se permiten imágenes en formato JPG, PNG, GIF o WEBP.",
+          confirmButtonColor: "#d33",
+        });
+        return; // ❌ No continúes si es inválido
+      }
+  
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagen(reader.result); // Guardamos el base64
-        setPreview(reader.result); // Lo usamos también como preview
+        setImagen(reader.result); // ✅ Guardamos como base64
+        setPreview(reader.result); // ✅ Mostramos preview
       };
-      reader.readAsDataURL(file); // Lee el archivo como base64
+      reader.readAsDataURL(file);
     }
-  };
+  };  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,7 +128,12 @@ function CrearUsuario() {
           </label>
           <label className="input-file-label">
             <FaImage className="icono" />
-            <input type="file" name="imagen" accept="image/*" onChange={handleImagen} />
+            <input 
+              type="file" 
+              name="imagen" 
+              accept="image/png, image/jpeg, image/gif, image/webp" 
+              onChange={handleImagen} 
+            />
           </label>
 
           {preview && (
