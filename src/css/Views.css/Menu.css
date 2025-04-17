@@ -24,6 +24,11 @@
 }
 
 @media (max-width: 768px) {
+    .App-header-menu {
+       padding-top: 20%; 
+    }
+
+    
     .App-header-menu-list {
         grid-template-columns: repeat(2, 1fr);
     }

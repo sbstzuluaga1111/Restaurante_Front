@@ -22,6 +22,32 @@
   border-radius: 0.5rem;
 }
 
+/* 🔻 Media query para desactivar animaciones en móviles */
+@media (max-width: 768px) {
+  .App-header-nav-derecha-button {
+    transition: none !important;
+  }
+
+  .App-header-nav-menuIcon {
+    transition: none !important;
+  }
+
+  .App-header-nav-derecha-button p {
+    max-width: none;
+    opacity: 1;
+    transform: none;
+    transition: none !important;
+    margin-left: 5px;
+  }
+
+  .App-header-nav-derecha-button:hover p {
+    max-width: none;
+    opacity: 1;
+    transform: none;
+    margin-left: 5px;
+  }
+}
+
 
 /* En pantallas pequeñas (responsive) */
 @media (max-width: 768px) {
@@ -155,13 +181,6 @@
   transform: translateX(0);
   margin-left: 5px;
 }
-
-
-
-
-
-
-
 
 .logout-button:hover {
   background-color: #c9302c;
