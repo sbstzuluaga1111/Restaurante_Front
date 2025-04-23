@@ -6,6 +6,7 @@ import Carrito from "../resource/Imgs/carrito.png";
 import Perfil from "../resource/Imgs/perfil.png";
 import Menu from "../resource/Imgs/menu.png";
 import PerfilModal from "./PerfilModal"; // asegúrate que la ruta sea correcta
+import Swal from 'sweetalert2';
 
 import "../css/Nav.css";
 
@@ -64,18 +65,32 @@ function Nav() {
         body: JSON.stringify(userDataJSON),
       });
   
-      if (!res.ok) throw new Error("Error al actualizar");
+      if (!res.ok) {
+        const errorData = await res.json(); // Capturamos el mensaje del backend
+        throw new Error(errorData.error || "Error al actualizar");
+      }
   
       const updatedUser = await res.json();
       updateUser(updatedUser);
       setUserData(updatedUser);
       setShowModal(false);
       console.log("Usuario actualizado:", updatedUser);
+  
+      Swal.fire({
+        icon: 'success',
+        title: '¡Actualizado!',
+        text: 'Tu perfil ha sido actualizado exitosamente.',
+      });
+      
     } catch (err) {
       console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err.message || "Error al actualizar",
+      });
     }
-  };
-  
+  };  
 
   return (
     <div className="App-header-nav">

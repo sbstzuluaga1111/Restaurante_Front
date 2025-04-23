@@ -1,0 +1,118 @@
+/* Contenedor general */
+.recover-container {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding-top: 4%;
+}
+
+/* Tarjeta de formulario */
+.recover-card {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Título */
+.recover-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Subtítulo */
+.recover-subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+/* Inputs con íconos */
+.input-icon-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+/* Icono dentro del campo de entrada */
+.recover-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;                /* Mantenemos esto para centrarlo verticalmente */
+  transform: translateY(-90%); /* Ajustamos el valor para centrar más arriba */
+  color: #4F46E5;
+  pointer-events: none;    /* Asegura que el icono no interfiera con la interacción del input */
+}
+
+
+.recover-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3rem; /* Agregamos más espacio para el icono */
+  font-size: 0.95rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+  box-sizing: border-box; /* Asegura que el padding no aumente el tamaño total */
+}
+
+/* Botón */
+.recover-button {
+  background-color: #4F46E5;
+  color: white;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  width: 100%;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.recover-button:hover {
+  background-color: #4338ca;
+}
+
+/* Mensajes */
+.recover-success {
+  color: green;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.recover-error {
+  color: red;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.recover-hint {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Lista de requisitos */
+.recover-list {
+  font-size: 0.85rem;
+  color: #4b5563;
+  text-align: left;
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+  list-style: disc;
+}

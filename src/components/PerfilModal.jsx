@@ -62,10 +62,28 @@ function PerfilModal({ user, onClose, onSave }) {
     }
   };
   
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+[\]{}|;:'",.<>?/]).{8,}$/;
+    if (password && !passwordRegex.test(password)) {
+      return "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula y un número.";
+    }
+    return null;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    const passwordValidationMessage = validatePassword(formData.password);
+    if (passwordValidationMessage) {
+      Swal.fire({
+        icon: "error",
+        title: "Contraseña inválida",
+        text: passwordValidationMessage,
+        confirmButtonColor: "#d33",
+      });
+      return; // Si la contraseña no es válida, no enviamos el formulario
+    }
+
     let imagenBase64 = user.imagen;
   
     if (formData.imagen) {
@@ -98,7 +116,6 @@ function PerfilModal({ user, onClose, onSave }) {
       onSave(data);
     }
   };
-  
 
   return (
     <div className="perfil-modal-backdrop">

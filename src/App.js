@@ -14,6 +14,8 @@ import TareasEmpleado from './views/TareasEmpleado.jsx';
 //import ProtectedRouteMulti from "./routes/ProtectedRouteMulti.js";
 import TareasAdmin from './views/TareasAdmin.jsx';
 import CrearUsuario from './views/CrearUsuario.jsx';
+import RecuperarPassword from "./components/RecuperarPassword";
+import ResetPassword from "./components/ResetPassword";
 
 
 function App() {
@@ -50,6 +52,8 @@ function App() {
             <Route path="/empleado" element={<Empleado />} />
           </Route>
 
+          <Route path="/recuperarPassword" element={<RecuperarPassword />} />
+          <Route path="/resetPassword/:token" element={<ResetPassword />} />
           <Route path="/error" element={<Error />} />
           <Route path="*" element={<Navigate to="/error" replace />} />
         </Routes>

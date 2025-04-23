@@ -74,6 +74,15 @@ function Login() {
             />
           </div>
           <button className="submit" type="submit">Sign in</button>
+          <div style={{ marginTop: "10px" }}>
+            <button
+              type="button"
+              onClick={() => navigate("/recuperarPassword")}
+              style={{ background: "none", border: "none", color: "#007bff", cursor: "pointer", textDecoration: "underline" }}
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
+          </div>
         </form>
       </header>
     </div>
