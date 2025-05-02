@@ -69,45 +69,54 @@
 }
 
 .App-header-home-1-img {
-  max-width: 100%;
+  max-width: 80%;
+  border-radius: 1rem;
   height: auto; /* Permite que la imagen mantenga su proporción */
-  min-height: 100%; /* Se ajusta al contenedor */
+  min-height: 400px; /* Se ajusta al contenedor */
   object-fit: cover; /* Ajusta la imagen sin deformarla */
   display: block;
   margin: 0 auto;
 }
 
 .App-header-home-1-container-1 {
-  background-color: rgb(189, 36, 36);
+  background-color: rgba(36, 89, 189, 0.308);
   color: black;
   padding: 2%;
   height: 400px; 
   border-radius: 1rem;
   display: flex;
-  margin: 5%;
+  margin: 3%;
   justify-content: center;
   align-items: center;
 }
 
 .App-header-home-1-subcontainer{
   display: flex;
+  margin-top: 2%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 40%;
-  background-color: #0a3cff;
+  background-color: rgba(255, 255, 255, 0.842);
   border-radius: 2rem;
 }
 
 
 .App-header-home-1-container-2 {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.842);
   color: black;
   padding: 2%;
   margin-top: 5%;
   margin-bottom: 5%;
   width: 40%;
   border-radius: 1rem;
+}
+
+@media (max-width: 768px) {
+  .App-header-home-1-subcontainer,
+  .App-header-home-1-container-2 {
+    width: 80%;
+  }
 }
 
 .App-header-home-2 {
@@ -134,10 +143,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 320px;
+  width: 15%;
   border-radius: 24px;
   line-height: 1.6;
   transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* 🔻 Ocultar el texto totalmente en móviles */
+@media (max-width: 768px) {
+  .App-header-nav-derecha-button p {
+    display: none !important;
+  }
 }
 
 .App-header-home-2-content {
